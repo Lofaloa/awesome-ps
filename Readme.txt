@@ -1,16 +1,13 @@
-
 Affichage commande PS de base :
 
-Affiche les process dont l'euid correspond � l'euid de l'utilisateur ainsi que le m�me terminal que le terminal appelant (TTY)
+Affiche les process dont l'euid correspond à l'euid de l'utilisateur ainsi que le même terminal que le terminal appelant (TTY)
 
 PID 		TTY 		TIME		CMD
 
 ID = Id du process 			| Trouvable dans /proc/"pid"/stat/pid	
-TTY = Terminal qui a ex�cut�		| Trouvable dans /proc/"pid"/stat/tty_nr
-TIME = Temps noyau accord� au process	| Trouvable dans /proc/"pid"/stat/stime
-CMD = Commande qui a lanc� le process	| Trouvable dans /proc/"pid"/stat/comm
-
-
+TTY = Terminal qui a exécuté		| Trouvable dans /proc/"pid"/stat/tty_nr
+TIME = Temps noyau accordé au process	| Trouvable dans /proc/"pid"/stat/stime
+CMD = Commande qui a lancé le process	| Trouvable dans /proc/"pid"/stat/comm
 
 Objectifs: 
 
@@ -20,6 +17,21 @@ Objectifs:
 	
 - ps plus clair/userfriendly
 
+Fonctionnalités
+- système de sélection de processes: on veut avoir la possibilité de sélectionner une série de pi
+d sur base de critères donnés:
+        - euid (effective user id)
+        - tty (terminal d'invocation)
+        - voire autres...
+        
+- sélection des informations
+        - stats 
+        - informations sur les fichiers
+        - mémoires partagées
+        - autres
+        
+- formatter les donner (moins important)
+~                                        
 
 
 
