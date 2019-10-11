@@ -33,6 +33,6 @@ d sur base de critères donnés:
 - formatter les donner (moins important)
 
 Parses le fichier status pour retrouver UID: https://stackoverflow.com/questions/18079449/is-there-a-system-call-for-obtaining-the-uid-gid-of-a-running-process
-
+Lister les pids: https://github.com/leo-arch/xps/blob/master/xps.c
 
 
