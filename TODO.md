@@ -1,3 +1,5 @@
+# Fonctionnalités
+
 Affichage commande PS de base :
 
 Affiche les process dont l'euid correspond à l'euid de l'utilisateur ainsi que le même terminal que le terminal appelant (TTY)
@@ -36,5 +38,3 @@ Parses le fichier status pour retrouver UID: https://stackoverflow.com/questions
 Lister les pids: https://github.com/leo-arch/xps/blob/master/xps.c
 
 Avoir le nombre max de pid : cat /proc/sys/kernel/pid_max
-
-
