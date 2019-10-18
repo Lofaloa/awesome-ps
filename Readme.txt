@@ -35,4 +35,6 @@ d sur base de critères donnés:
 Parses le fichier status pour retrouver UID: https://stackoverflow.com/questions/18079449/is-there-a-system-call-for-obtaining-the-uid-gid-of-a-running-process
 Lister les pids: https://github.com/leo-arch/xps/blob/master/xps.c
 
+Avoir le nombre max de pid : cat /proc/sys/kernel/pid_max
+
 
