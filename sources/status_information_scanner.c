@@ -13,11 +13,17 @@
  * 
  * The order should not be modified as it follows the one defined in the manual
  * pages (man 5 proc, section /proc/[pid]/stat)
+ * 
+ * Note: I stopped the format at stat.rsslim (25)
  */
-static const char *STATUS_INFORMATION_FORMAT = "%d %s %c %d %d %d %d";
+static const char *STATUS_INFORMATION_FORMAT = 
+    "%d %s %c %d %d %d %d %d %u %lu %lu %lu %lu %lu %lu %ld %ld %ld %ld %ld \
+    %ld %llu %lu %ld %lu";
 
-/* Reads data from the /proc/[pid]/stat file and stores it in the given
+/* Scans data from the /proc/[pid]/stat file and stores it in the given
  * structure.
+ * 
+ * Note: I stopped the format at stat.rsslim (25)
  */
 int scanStatusInformation(int pid, status_information *information)
 {
@@ -33,7 +39,25 @@ int scanStatusInformation(int pid, status_information *information)
                &(information->ppid),
                &(information->pgrp),
                &(information->session),
-               &(information->tty_nr)
+               &(information->tty_nr),
+               &(information->tpgid),
+               &(information->flags),
+               &(information->minflt),
+               &(information->cminflt),
+               &(information->majflt),
+               &(information->cmajflt),
+               &(information->utime),
+               &(information->stime),
+               &(information->cutime),
+               &(information->cstime),
+               &(information->priority),
+               &(information->nice),
+               &(information->num_threads),
+               &(information->itrealvalue),
+               &(information->starttime),
+               &(information->vsize),
+               &(information->rss),
+               &(information->rsslim)
         );
         fclose(fp);
         return 0;

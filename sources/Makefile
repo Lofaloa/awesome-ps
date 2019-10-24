@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = main.c status_information.h status_information_scanner.c status_information_scanner.h
+OBJS = main.c status_information.h status_information_scanner.c status_information_scanner.h awesomepsio.h awesomepsio.c
 
 #CC specifies which compiler we're using
 CC = gcc
