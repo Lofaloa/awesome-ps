@@ -7,21 +7,25 @@
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
 
+#define MINOR_DEVICE(dev) ((dev) & 0xff)
+
 /* Represents the given process state by a human readable representation.
  */
-static char *stateToString(char process_state) {
-    char * representation;
-    switch (process_state) {
-        case 'R':
-            representation = "Running";
-            break;
-        case 'S':
-            representation = "Sleeping";
-            break;
-        case 'Z':
-            representation = "Zombie";
-        default:
-            representation[0] = process_state;
+static char *stateToString(char process_state)
+{
+    char *representation;
+    switch (process_state)
+    {
+    case 'R':
+        representation = "Running";
+        break;
+    case 'S':
+        representation = "Sleeping";
+        break;
+    case 'Z':
+        representation = "Zombie";
+    default:
+        representation[0] = process_state;
     }
     return representation;
 }
@@ -45,7 +49,8 @@ int getProcessCommandline(int pid, char *cmdline)
     return -1;
 }
 
-void printStatusInformation(status_information information) {
+void printStatusInformation(status_information information)
+{
     printf("%-15s | %-15s | %-15s\n", "PID", "Command", "State");
     printf("%-15d | %-15s | %-15s\n", information.pid, information.comm, stateToString(information.state));
 }
@@ -63,7 +68,7 @@ void printFullStatusInformation(status_information *information)
     printf("%-15s %d\n", "ppid", information->ppid);
     printf("%-15s %d\n", "pgrp", information->pgrp);
     printf("%-15s %d\n", "session", information->session);
-    printf("%-15s %d\n", "tty_nr", information->tty_nr);
+    printf("%-15s %d\n", "tty_nr", MINOR_DEVICE(information->tty_nr));
     printf("%-15s %d\n", "tpgid", information->tpgid);
     printf("%-15s %u\n", "flags", information->flags);
     printf("%-15s %lu\n", "minflt", information->minflt);
