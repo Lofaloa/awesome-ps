@@ -28,4 +28,7 @@ man pts nous en dit plus sur la notion de pseudo terminal
 
 On remarque que sur une installation avec une interface graphique, les différentes instances de terminals sont des pts. Or, sur la VM d'environnement SYSG5, les terminaux sont des tty.
 
+#### Les temps d'exécution
+[How do I get the total CPU usage of an application from /proc/pid/stat?](https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat)
+
 ## Affichage et sélection des informations liées à un processeur
