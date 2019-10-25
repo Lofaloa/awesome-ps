@@ -55,4 +55,11 @@ Fichier contenant un condensé lisible des informations contenues dans les fichi
 Id de l'user ayant lancé la commande du process. Trouvable avec UID dans status l'id de son groupe est à GID
 
 
+#### Fichier virtuel /proc/[pid]/exe
+### Description
+Fichier contenant le lien symbolique du fichier du process. Ce lien symbolique peut être déférencé uniquement via la fonction ```readlink(2)```
+
+### Fonction readlink(2)
+Fonction dont la signature est : 
+
 ## (3) Affichage et sélection des informations liées à un processeur
