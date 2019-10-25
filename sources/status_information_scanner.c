@@ -62,5 +62,5 @@ int scanStatusInformation(int pid, status_information *information)
         fclose(fp);
         return 0;
     }
-    return 0;
+    return -1;
 }
