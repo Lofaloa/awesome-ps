@@ -4,44 +4,56 @@
 #include <unistd.h>
 #include <errno.h>
 #include <limits.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <ctype.h>
+#include <dirent.h>
+#include <string.h>
+#include <fcntl.h>
 
 #include "status_information_scanner.h"
 #include "awesomepsio.h"
 
-long parsePID(char *str)
-{
-    char *endptr;
-    long pid = strtol(str, &endptr, 10);
-    if (errno == ERANGE)
-    {
-        printf("PID parsing error: the resulting value was out of range.\n");
-        exit(-1);
-    }
-    if (endptr == str || *endptr != '\0')
-    {
-        printf("PID parsing error: '%s' could not be parsed.\n", str);
-        exit(-1);
-    }
-    return pid;
-}
-
 int main(int argc, char **argv)
 {
-    if (argc < 2)
-    {
-        printf("usage: ps <pid>\n");
-        return 1;
-    }
-    long pid = parsePID(argv[1]);
+
     status_information information;
-    if (scanStatusInformation(pid, &information) == -1)
+
+    long pid;
+
+    struct dirent *dirp;
+    DIR *dp;
+    
+    int pidTable[32768];
+    int i = 0;
+    dp = opendir("/proc");
+    printf("PID   -                 CMD\n");
+    printf("------------------------------------\n");
+    while ((dirp = readdir(dp)) != NULL)
     {
-        printf("PID not found: no /proc/%d/stat virtual file was found.\n", pid);
-        exit(-2);
+        if (isdigit((int)dirp->d_name))
+        {
+
+            pid = (long)dirp->d_name;
+
+            if (scanStatusInformation(pid, &information) == -1)
+            {
+                printf("PID not found: no /proc/%d/stat virtual file was found.\n", pid);
+                exit(-2);
+            }
+            else
+            {
+                //Here we can add some filtering criteria
+                
+                pidTable[i] = pid ;
+                i++;
+            }
+        }
     }
-    else
-    {
-        printFullStatusInformation(&information);
-    }
+    
+    pidTable[i] = 0 ;
+    
+    
+    closedir(dp);
     return 0;
 }
