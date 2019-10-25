@@ -46,4 +46,23 @@ Explication trouvée [ici](https://blog.codinghorror.com/understanding-user-and-
 
 - In User mode, the executing code has no ability to directly access hardware or reference memory. Code running in user mode must delegate to system APIs to access hardware or memory. Due to the protection afforded by this sort of isolation, crashes in user mode are always recoverable. Most of the code running on your computer will execute in user mode.
 
+
+#### Fichier virtuel /proc/[pid]/status
+### Description
+Fichier contenant un condensé lisible des informations contenues dans les fichiers /proc/[pid]/stat et /proc/[pid]/statm
+
+#### L'user et group id 
+Id de l'user ayant lancé la commande du process. Trouvable avec UID dans status l'id de son groupe est à GID
+
+
+#### Fichier virtuel /proc/[pid]/exe
+### Description
+Fichier contenant le lien symbolique du fichier du process. Ce lien symbolique peut être déférencé uniquement via la fonction ```readlink(2)```
+
+### Fonction readlink(2)
+Fonction dont la signature est : ``` ssize_t readlink(const char *pathname, char *buf, size_t bufsiz); ```
+
+Place le contenu du lien symbolique ```pathname``` dans ```buf``` qui a une taille de ```bufsiz```
+
+
 ## (3) Affichage et sélection des informations liées à un processeur
