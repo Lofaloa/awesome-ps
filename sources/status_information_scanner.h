@@ -12,3 +12,5 @@
  * Note: I stopped the format at stat.rsslim (25)
  */
 int scanStatusInformation(int, status_information *);
+
+long unsigned clockTicksToSeconds(long unsigned clockTicks);

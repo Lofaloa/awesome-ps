@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -32,6 +33,12 @@ static char *stateToString(char process_state)
     return representation;
 }
 
+double clockTicksToSeconds(long unsigned clockTicks)
+{
+    double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
+    return result;
+}
+
 void printStatusInformation(status_information information)
 {
     printf("%-15s | %-15s | %-15s\n", "PID", "Command", "State");
@@ -54,17 +61,19 @@ void printFullStatusInformation(status_information *information)
         printf("%-15s %d\n", "ppid", information->ppid);
         printf("%-15s %d\n", "pgrp", information->pgrp);
         printf("%-15s %d\n", "session", information->session);
-        printf("%-15s %d\n", "tty_nr", MINOR_DEVICE(information->tty_nr));
+        printf("%-15s %d (minor)\n", "tty_nr", MINOR_DEVICE(information->tty_nr));
         printf("%-15s %d\n", "tpgid", information->tpgid);
         printf("%-15s %u\n", "flags", information->flags);
         printf("%-15s %lu\n", "minflt", information->minflt);
         printf("%-15s %lu\n", "cminflt", information->cminflt);
         printf("%-15s %lu\n", "majflt", information->majflt);
         printf("%-15s %lu\n", "cmajflt", information->cmajflt);
-        printf("%-15s %lu\n", "utime", information->utime);
-        printf("%-15s %lu\n", "stime", information->stime);
-        printf("%-15s %ld\n", "cutime", information->cutime);
-        printf("%-15s %ld\n", "cstime", information->cstime);
+
+        printf("%-15s %.2f seconds\n", "utime", clockTicksToSeconds(information->utime));
+        printf("%-15s %.2f seconds\n", "stime", clockTicksToSeconds(information->stime));
+        printf("%-15s %.2f seconds\n", "cutime", clockTicksToSeconds(information->cutime));
+        printf("%-15s %.2f seconds\n", "cstime", clockTicksToSeconds(information->cstime));
+
         printf("%-15s %ld\n", "priority", information->priority);
         printf("%-15s %ld\n", "nice", information->nice);
         printf("%-15s %ld\n", "num_threads", information->num_threads);
