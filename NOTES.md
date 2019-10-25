@@ -60,6 +60,9 @@ Id de l'user ayant lancé la commande du process. Trouvable avec UID dans status
 Fichier contenant le lien symbolique du fichier du process. Ce lien symbolique peut être déférencé uniquement via la fonction ```readlink(2)```
 
 ### Fonction readlink(2)
-Fonction dont la signature est : 
+Fonction dont la signature est : ``` ssize_t readlink(const char *pathname, char *buf, size_t bufsiz); ```
+
+Place le contenu du lien symbolique ```pathname``` dans ```buf``` qui a une taille de ```bufsiz```
+
 
 ## (3) Affichage et sélection des informations liées à un processeur
