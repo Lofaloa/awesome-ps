@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <time.h>
 
 #include "status_information.h"
 
@@ -37,6 +38,11 @@ double clockTicksToSeconds(long unsigned clockTicks)
 {
     double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
     return result;
+}
+
+void printStartTime(status_information *information) {
+    printf("%-15s %llu\n", "starttime", information->starttime);
+
 }
 
 void printStatusInformation(status_information information)
@@ -78,7 +84,9 @@ void printFullStatusInformation(status_information *information)
         printf("%-15s %ld\n", "nice", information->nice);
         printf("%-15s %ld\n", "num_threads", information->num_threads);
         printf("%-15s %ld\n", "itrealvalue", information->itrealvalue);
-        printf("%-15s %llu\n", "starttime", information->starttime);
+
+        printStartTime(information);
+
         printf("%-15s %lu\n", "vsize", information->vsize);
         printf("%-15s %ld\n", "rss", information->rss);
         printf("%-15s %lu\n", "rsslim", information->rsslim);
