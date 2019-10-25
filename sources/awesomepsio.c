@@ -42,13 +42,25 @@ double clockTicksToSeconds(long unsigned clockTicks)
 
 void printStartTime(status_information *information) {
     printf("%-15s %llu\n", "starttime", information->starttime);
-
 }
 
-void printStatusInformation(status_information information)
+void printTableHeader() {
+    printf("%-10s | %-30s | %-30s | %-30s\n", 
+        "PID",
+        "Command",
+        "State",
+        "Terminal"
+    );
+}
+
+void printStatusInformation(const status_information *information)
 {
-    printf("%-15s | %-15s | %-15s\n", "PID", "Command", "State");
-    printf("%-15d | %-15s | %-15s\n", information.pid, information.comm, stateToString(information.state));
+    printf(
+        "%-10d | %-30s | %-30s\n", 
+        information->pid,
+        information->comm,
+        stateToString(information->state)
+    );
 }
 
 /**

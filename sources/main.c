@@ -5,6 +5,7 @@
 #include <errno.h>
 
 #include "status_information_scanner.h"
+#include "process_selector.h"
 #include "awesomepsio.h"
 
 /**
@@ -34,14 +35,8 @@ long parsePID(char *str)
     return pid;
 }
 
-int main(int argc, char **argv)
+void showProcess(int pid)
 {
-    if (argc < 2)
-    {
-        printf("usage: ps <pid>\n");
-        return 1;
-    }
-    long pid = parsePID(argv[1]);
     status_information information;
     if (scanStatusInformation(pid, &information) == -1)
     {
@@ -50,7 +45,22 @@ int main(int argc, char **argv)
     }
     else
     {
-        printFullStatusInformation(&information);
+        printStatusInformation(information);
     }
-    return 0;
+}
+
+void showAllProcesses() {
+    int pids[1000];
+    searchProcesses(pids);
+    int current = 0;
+    while (pids[current] != NULL)
+    {
+        showProcess(pids[current]);
+        current++;
+    }
+}
+
+int main(int argc, char **argv)
+{
+    showAllProcesses();
 }
