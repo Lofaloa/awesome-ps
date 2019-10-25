@@ -11,49 +11,17 @@
 #include <string.h>
 #include <fcntl.h>
 
-#include "status_information_scanner.h"
-#include "awesomepsio.h"
+#include "process_selector.h"
 
 int main(int argc, char **argv)
 {
-
-    status_information information;
-
-    long pid;
-
-    struct dirent *dirp;
-    DIR *dp;
-    
-    int pidTable[32768];
-    int i = 0;
-    dp = opendir("/proc");
-    printf("PID   -                 CMD\n");
-    printf("------------------------------------\n");
-    while ((dirp = readdir(dp)) != NULL)
+    int pids[1000];
+    searchProcesses(pids);
+    int current = 0;
+    while (pids[current] != NULL)
     {
-        if (isdigit((int)dirp->d_name))
-        {
-
-            pid = (long)dirp->d_name;
-
-            if (scanStatusInformation(pid, &information) == -1)
-            {
-                printf("PID not found: no /proc/%d/stat virtual file was found.\n", pid);
-                exit(-2);
-            }
-            else
-            {
-                //Here we can add some filtering criteria
-                
-                pidTable[i] = pid ;
-                i++;
-            }
-        }
+        printf("%d\n", pids[current]);
+        current++;
     }
-    
-    pidTable[i] = 0 ;
-    
-    
-    closedir(dp);
     return 0;
 }
