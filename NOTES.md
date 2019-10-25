@@ -46,4 +46,13 @@ Explication trouvée [ici](https://blog.codinghorror.com/understanding-user-and-
 
 - In User mode, the executing code has no ability to directly access hardware or reference memory. Code running in user mode must delegate to system APIs to access hardware or memory. Due to the protection afforded by this sort of isolation, crashes in user mode are always recoverable. Most of the code running on your computer will execute in user mode.
 
+
+#### Fichier virtuel /proc/[pid]/status
+### Description
+Fichier contenant un condensé lisible des informations contenues dans les fichiers /proc/[pid]/stat et /proc/[pid]/statm
+
+#### L'user et group id 
+Id de l'user ayant lancé la commande du process. Trouvable avec UID dans status l'id de son groupe est à GID
+
+
 ## (3) Affichage et sélection des informations liées à un processeur
