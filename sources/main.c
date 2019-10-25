@@ -3,11 +3,20 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
-#include <limits.h>
 
 #include "status_information_scanner.h"
 #include "awesomepsio.h"
 
+/**
+ * Parses a string representing a pid and convert it to a long integer. The
+ * value of the parsed pid is returned.
+ * 
+ * The given string should exclusively contain numerical characters. If it not
+ * the case, this functions exits the program and prints a appropriate message
+ * 
+ * If the represented pid is evaluated to be out of range then this
+ * function exits the program and prints a appropriate message.
+ */
 long parsePID(char *str)
 {
     char *endptr;
