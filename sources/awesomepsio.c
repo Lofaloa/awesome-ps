@@ -13,27 +13,6 @@
 // Minor device in contained in the conbination of bits 31 and 20 and 7 to 0
 #define MINOR_DEVICE(dev) ((dev)&0xff)
 
-/* Represents the given process state by a human readable representation.
- */
-static char *stateToString(char process_state)
-{
-    char *representation;
-    switch (process_state)
-    {
-    case 'R':
-        representation = "Running";
-        break;
-    case 'S':
-        representation = "Sleeping";
-        break;
-    case 'Z':
-        representation = "Zombie";
-    default:
-        representation[0] = process_state;
-    }
-    return representation;
-}
-
 double clockTicksToSeconds(long unsigned clockTicks)
 {
     double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
@@ -45,21 +24,33 @@ void printStartTime(status_information *information) {
 }
 
 void printTableHeader() {
-    printf("%-10s | %-30s | %-30s | %-30s\n", 
+    printRowSeparator();
+    printf("| %-10s | %-30s | %-10s | %-10s |\n", 
         "PID",
         "Command",
         "State",
         "Terminal"
     );
+    printRowSeparator();
 }
 
-void printStatusInformation(const status_information *information)
+void printRowSeparator() {
+    printf("+%-12s+%-32s+%-12s+%-12s+\n", 
+        "------------",
+        "--------------------------------",
+        "------------",
+        "------------"
+    );
+}
+
+void printStatusInformation(status_information *information)
 {
     printf(
-        "%-10d | %-30s | %-30s\n", 
+        "| %-10d | %-30s | %-10c | %10d |\n", 
         information->pid,
         information->comm,
-        stateToString(information->state)
+        information->state,
+        information->tty_nr
     );
 }
 

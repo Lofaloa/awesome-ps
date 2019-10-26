@@ -29,7 +29,7 @@ long parseProcessDirectoryName(char *dirname)
     }
 }
 
-void searchProcesses(int *pid_array)
+int searchProcesses(int *pid_array)
 {
     if (pid_array != NULL) {
         struct dirent *entry;

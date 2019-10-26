@@ -35,7 +35,7 @@ long parsePID(char *str)
     return pid;
 }
 
-void showProcess(int pid)
+void showProcessStatusInformationFor(const int pid)
 {
     status_information information;
     if (scanStatusInformation(pid, &information) == -1)
@@ -45,7 +45,7 @@ void showProcess(int pid)
     }
     else
     {
-        printStatusInformation(information);
+        printStatusInformation(&information);
     }
 }
 
@@ -53,14 +53,33 @@ void showAllProcesses() {
     int pids[1000];
     searchProcesses(pids);
     int current = 0;
+    printTableHeader();
     while (pids[current] != NULL)
     {
-        showProcess(pids[current]);
+        showProcessStatusInformationFor(pids[current]);
         current++;
     }
+    printRowSeparator();
 }
 
 int main(int argc, char **argv)
 {
-    showAllProcesses();
+    if (argc == 1)
+    {
+        showAllProcesses();
+        return 1;
+    }
+    else if (argc == 2)
+    {
+        long pid = parsePID(argv[1]);
+        printTableHeader();
+        showProcessStatusInformationFor(pid);
+        printRowSeparator();
+    }
+    else
+    {
+        printf("usage: %s [pid]", argv[0]);
+    }
+    return 0;
+
 }
