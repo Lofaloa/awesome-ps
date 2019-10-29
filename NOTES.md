@@ -52,7 +52,7 @@ Explication trouvée [ici](https://blog.codinghorror.com/understanding-user-and-
 Fichier contenant un condensé lisible des informations contenues dans les fichiers /proc/[pid]/stat et /proc/[pid]/statm
 
 #### L'user et group id 
-Id de l'user ayant lancé la commande du process. Trouvable avec UID dans status l'id de son groupe est à GID
+Id de l'user ayant lancé la commande du process. Trouvable avec UID dans status l'id de son groupe est à GID  ==> ```le nom de l'user peut être trouvé dans /etc/passwd```
 
 
 #### Fichier virtuel /proc/[pid]/exe
