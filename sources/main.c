@@ -54,7 +54,7 @@ void showAllProcesses() {
     searchProcesses(pids);
     int current = 0;
     printTableHeader();
-    while (pids[current] != NULL)
+    while (pids[current] >= 0)
     {
         showProcessStatusInformationFor(pids[current]);
         current++;

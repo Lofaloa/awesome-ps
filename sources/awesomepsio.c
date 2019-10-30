@@ -3,12 +3,12 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
+#include <stdio.h>
 
 #include "status_information.h"
 
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
-#define NULL 0
 
 // Minor device in contained in the conbination of bits 31 and 20 and 7 to 0
 #define MINOR_DEVICE(dev) ((dev)&0xff)
@@ -23,6 +23,15 @@ void printStartTime(status_information *information) {
     printf("%-15s %llu\n", "starttime", information->starttime);
 }
 
+void printRowSeparator() {
+    printf("+%-12s+%-32s+%-12s+%-12s+\n", 
+        "------------",
+        "--------------------------------",
+        "------------",
+        "------------"
+    );
+}
+
 void printTableHeader() {
     printRowSeparator();
     printf("| %-10s | %-30s | %-10s | %-10s |\n", 
@@ -32,15 +41,6 @@ void printTableHeader() {
         "Terminal"
     );
     printRowSeparator();
-}
-
-void printRowSeparator() {
-    printf("+%-12s+%-32s+%-12s+%-12s+\n", 
-        "------------",
-        "--------------------------------",
-        "------------",
-        "------------"
-    );
 }
 
 void printStatusInformation(status_information *information)

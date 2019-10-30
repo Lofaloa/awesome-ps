@@ -5,7 +5,6 @@
 #include <errno.h>
 
 #define PROC_ROOT "/proc"
-#define NULL 0
 
 /* Parses the given directory name. If the directory name contains exclusively
  * digits is parsed and converted to a pid. 
@@ -18,7 +17,7 @@ long parseProcessDirectoryName(char *dirname)
     long pid = strtol(dirname, &endptr, 10);
     if (errno == ERANGE)
     {
-        printf("Directory name parsing error.", dirname);
+        printf("Directory name parsing error while parsing %s.\n", dirname);
         exit(-1);
     }
     if (endptr == dirname || *endptr != '\0')
@@ -29,7 +28,7 @@ long parseProcessDirectoryName(char *dirname)
     }
 }
 
-int searchProcesses(int *pid_array)
+void searchProcesses(int *pid_array)
 {
     if (pid_array != NULL) {
         struct dirent *entry;
@@ -40,13 +39,13 @@ int searchProcesses(int *pid_array)
             while ((entry = readdir(proc)) != NULL)
             {
                 long pid;
-                if (pid = parseProcessDirectoryName(entry->d_name))
+                if ((pid = parseProcessDirectoryName(entry->d_name)))
                 {
                     pid_array[current] = pid;
                     current++;
                 }
             }
-            pid_array[current] = NULL;
+            pid_array[current] = -1;
         } else {
             perror("Processes search error: ");
             exit(-1);
