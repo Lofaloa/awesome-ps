@@ -34,10 +34,24 @@ function showReport {
 
 function installAwesomePS {
     echo "[INFO] call to installAwesomePS"
+    if [ -d "$TARGET_DIRECTORY" ]; then
+        echo "The project is already built in the ${TARGET_DIRECTORY} directory."
+    else
+        echo "Building the project in ${TARGET_DIRECTORY}."
+        make
+    fi
+}
+
+function printOption {
+    printf "   %-15s %s\n" "$1" "$2"
 }
 
 function showHelp {
-    echo "[INFO] call to showHelp"
+    echo "Available options:"
+    printOption $DEMONSTRATION_OPTION "Starts a project demonstration"
+    printOption $REPORT_OPTION "Opens the project report in PDF reader"
+    printOption $INSTALL_OPTION "Installs the project on the user machine"
+    printOption $HELP_OPTION "Prints the list of available options"
 }
 
 function handle_option {
@@ -56,17 +70,13 @@ function handle_option {
 }
 
 ################################# ENTRY POINT #################################
-if [ $# -eq $REQUIRED_OPTIONS ]; then
+if [ $# -eq 0 ]; then
+    printf "AWESOME PS's guide script\n\n"
+    printf "Welcome to our guide, here is the list of available options!\n\n"
+    showHelp
+elif [ $# -eq $REQUIRED_OPTIONS ]; then
     handle_option "$1"
 else
     echo "usage: $0 <option> (enter \"$0 help\" to print available options)"
     exit 1
 fi
-
-
-# if [ -d "$TARGET_DIRECTORY" ]; then
-#     echo "The project is already built in the ${TARGET_DIRECTORY} directory."
-# else
-#     echo "Building the project in ${TARGET_DIRECTORY}."
-#     make
-# fi
