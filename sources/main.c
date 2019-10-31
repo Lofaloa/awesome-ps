@@ -45,7 +45,7 @@ void showProcessStatusInformationFor(const int pid)
     }
     else
     {
-        printStatusInformation(&information);
+        printFullStatusInformation(&information);
     }
 }
 
