@@ -1,6 +1,18 @@
 # Awesome PS
-## Structure du répertoire
-- **Branche *status_information* :** dévelopement des fonctions de lecture et d'affichage du fichier virtuel ```/proc/[pid]/stat```.
-- **Branche *documentations* :** rédaction et mise en page du rapport et de la documentation .
+## Dates clés
+- **08/11/2019 :** montrer l'automatisation.
+- **19/11/2019 :** montrer le rapport, l'automatisation et readme.
+- **22/11/2019 :** première remise.
+- **03/12/2019 :** remise finale.
+- **06/12/2019 :** début des présentations.
 
+## Structure du projet
+- **sources :** le dossier contient toutes les sources du projet.
+
+## Installation et compilation
+```
+git clone <url>
+cd <path>
+make
+```
 
