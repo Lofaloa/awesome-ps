@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -21,8 +22,10 @@ int findProcessUserId(int pid)
     ssize_t read;
     char filePath[30];
     char *tokens[30];
+    char *lineTokens[10];
     bool found = FALSE ;
     int i = 0;
+    int j = 0;
     
     sprintf(filePath,"/proc/%d/status",pid);
     fp = fopen(filePath,"r");
@@ -31,12 +34,15 @@ int findProcessUserId(int pid)
     while((read = getline(&line, &length, fp)) != -1 && !found)
     {
         i=0;
-        tokens[i]=strtok(line," ");
+        tokens[i]=strtok(line,":");
         while (tokens[i] != NULL) tokens[++i]=strtok(NULL," ");
-        if(tokens[0] == "Uid:")
+        if(strcmp(tokens[0],"Uid")==0)
         {
             found = TRUE;
-            userId = tokens[1];
+            j=0;
+            lineTokens[j]=strtok(tokens[1],"\t");
+            while (lineTokens[j] != NULL) lineTokens[++j]=strtok(NULL," ");
+            userId = atoi(lineTokens[0]);
         }
     }
     fclose(fp);
@@ -48,33 +54,29 @@ int findProcessUserId(int pid)
 
 char* findUserName(int userId)
 {
-    char * userName;
     FILE * fp;
     char * line = NULL ;
     size_t length = 0;
     ssize_t read;
     char *tokens[30];
-    bool found = FALSE ;
     int i = 0;
     
     fp = fopen("/etc/passwd","r");
     if(fp==NULL) return(-1);
-    
-    while((read = getline(&line, &length, fp)) != -1 && !found)
+    while((read = getline(&line, &length, fp)) != -1)
     {
         i=0;
         tokens[i]=strtok(line,":");
-        while (tokens[i] != NULL) tokens[++i]=strtok(NULL," ");
-        if((int)tokens[2] == userId)
+        while (tokens[i] != NULL) tokens[++i]=strtok(NULL,":");
+        if(atoi(tokens[2]) == userId)
         {
-            found = TRUE;
-            userName = tokens[0];
+            return tokens[0];
         }
     }
     fclose(fp);
     if(line) free(line);
     
-    return userName;
+    return -1;
 }
 
 

@@ -7,6 +7,7 @@
 #include "status_information_scanner.h"
 #include "process_selector.h"
 #include "awesomepsio.h"
+#include "user_information.h"
 
 /**
  * Parses a string representing a pid and convert it to a long integer. The
@@ -75,6 +76,18 @@ int main(int argc, char **argv)
         printTableHeader();
         showProcessStatusInformationFor(pid);
         printRowSeparator();
+        
+        int userId;
+        userId = findProcessUserId(pid);
+        printf("Voici l'id de l'user qui a lancé le process : %d \n", userId);
+        
+        char * name;
+        name = findUserName(userId);
+        printf("Voici le nom de l'user qui a lancé le process : %s \n", name);
+        
+        int authorId;
+        authorId = findFileUserId(pid);
+        printf("Voici l'id du créateur de l'executable  : %d \n", authorId);
     }
     else
     {
