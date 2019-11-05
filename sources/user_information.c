@@ -104,7 +104,7 @@ int findFileUserId(int pid)
     fclose(fp);
     if(line) free(line);
     
-    readlink(&pathName, &symbolicLink, &symbolicLinkSize);
+    readlink(pathName, symbolicLink, symbolicLinkSize);
     
     if(lstat(symbolicLink, &linkStats) == 0)
     {
