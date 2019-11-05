@@ -5,6 +5,7 @@
 #include <errno.h>
 
 #include "status_information_scanner.h"
+#include "awesomeps_formats.h"
 #include "process_selector.h"
 #include "awesomepsio.h"
 
@@ -64,22 +65,23 @@ void showAllProcesses() {
 
 int main(int argc, char **argv)
 {
-    if (argc == 1)
-    {
-        showAllProcesses();
-        return 1;
-    }
-    else if (argc == 2)
-    {
-        long pid = parsePID(argv[1]);
-        printTableHeader();
-        showProcessStatusInformationFor(pid);
-        printRowSeparator();
-    }
-    else
-    {
-        printf("usage: %s [pid]", argv[0]);
-    }
+    // if (argc == 1)
+    // {
+    //     showAllProcesses();
+    //     return 1;
+    // }
+    // else if (argc == 2)
+    // {
+    //     long pid = parsePID(argv[1]);
+    //     printTableHeader();
+    //     showProcessStatusInformationFor(pid);
+    //     printRowSeparator();
+    // }
+    // else
+    // {
+    //     printf("usage: %s [pid]", argv[0]);
+    // }
+    printProcessInformations(0, DEFAULT_FORMAT | UNDEFINED_FORMAT);
     return 0;
 
 }

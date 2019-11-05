@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "status_information.h"
+#include "awesomeps_formats.h"
 
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
@@ -93,5 +94,14 @@ void printFullStatusInformation(status_information *information)
         printf("%-15s %lu\n", "vsize", information->vsize);
         printf("%-15s %ld\n", "rss", information->rss);
         printf("%-15s %lu\n", "rsslim", information->rsslim);
+    }
+}
+
+void printProcessInformations(int pid, int formats) {
+    if (formats & DEFAULT_FORMAT) {
+        printf("Using default format\n");
+    }
+    if (formats & UNDEFINED_FORMAT) {
+        printf("Using undefined format\n");
     }
 }
