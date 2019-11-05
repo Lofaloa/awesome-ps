@@ -2,7 +2,7 @@
 ## Sélection des données à afficher (Alexandre)
 Critères de sélection:
 - Sélection sur base de l'utilisateur.
-- Sélection sur base du terminal courant.
+- Sélection sur base du terminal courant et utilisateur courant. (option de base)
 - Sélection sur base du statut d'un processus.
 
 **Remarque:** travailler sur base de flags passés en paramètre de la fonction process_selector.searchProcesses.
