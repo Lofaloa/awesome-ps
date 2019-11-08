@@ -105,12 +105,21 @@ void printFullStatusInformation(status_information *information)
  *     - the command that executed the process
  *     - the name of the owner
  */ 
-void printGeneralInformation(int pid) {
-    printf("General informations about %d\n", pid);
+void printGeneralInformation(status_information *info) {
+    printf(
+        "| %-10d | %-30s | %-10c |\n", 
+        info->pid,
+        info->comm,
+        info->state
+    );
 }
 
-void printRuntimeInformation(int pid) {
-    printf("Information about runtime for process of pid = %d\n", pid);
+void printRuntimeInformation(status_information *info) {
+    printf("TODO: Information about runtime for process of pid = %d\n", info->pid);
+}
+
+void printPagingInformation(status_information *info) {
+    printf("TODO: Information about paging for process of pid = %d\n", info->pid);
 }
 
 /* Prints process information using the given format for the specified process.
@@ -118,13 +127,17 @@ void printRuntimeInformation(int pid) {
  * If the given format is unknown, an error message is shown and the program
  * exits with -1 status.
  */
-void printProcessInformations(int pid, AwesomePsFormat format) {
+void printProcessInformations(status_information *info, awesomeps_format format)
+{
     switch (format) {
         case GENERAL_FORMAT:
-            printGeneralInformation(pid);            
+            printGeneralInformation(info);            
             break;
         case RUNTIME_FORMAT:
-            printRuntimeInformation(pid);
+            printRuntimeInformation(info);
+            break;
+        case PAGING_FORMAT:
+            printPagingInformation(info);
             break;
         default:
             printf("Printing error: %d is an unknown format", format);
