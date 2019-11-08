@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -97,11 +98,36 @@ void printFullStatusInformation(status_information *information)
     }
 }
 
-void printProcessInformations(int pid, int formats) {
-    if (formats & DEFAULT_FORMAT) {
-        printf("Using default format\n");
-    }
-    if (formats & UNDEFINED_FORMAT) {
-        printf("Using undefined format\n");
+/* Prints general information about the process identified by the given pid.
+ *
+ * General information contain :
+ *     - the process pid
+ *     - the command that executed the process
+ *     - the name of the owner
+ */ 
+void printGeneralInformation(int pid) {
+    printf("General informations about %d\n", pid);
+}
+
+void printRuntimeInformation(int pid) {
+    printf("Information about runtime for process of pid = %d\n", pid);
+}
+
+/* Prints process information using the given format for the specified process.
+ * 
+ * If the given format is unknown, an error message is shown and the program
+ * exits with -1 status.
+ */
+void printProcessInformations(int pid, AwesomePsFormat format) {
+    switch (format) {
+        case GENERAL_FORMAT:
+            printGeneralInformation(pid);            
+            break;
+        case RUNTIME_FORMAT:
+            printRuntimeInformation(pid);
+            break;
+        default:
+            printf("Printing error: %d is an unknown format", format);
+            exit(-1);
     }
 }

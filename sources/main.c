@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     // {
     //     printf("usage: %s [pid]", argv[0]);
     // }
-    printProcessInformations(0, DEFAULT_FORMAT | UNDEFINED_FORMAT);
+    printProcessInformations(0, GENERAL_FORMAT | RUNTIME_FORMAT);
     return 0;
 
 }

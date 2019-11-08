@@ -1,7 +1,12 @@
-/* This structure defines the formats. A format is used to select the data
- * that should be shown to the user.
+/* Defines the print formats. A format is used to select the data that should
+ * be shown to the user.
  */
 typedef enum format {
-    DEFAULT_FORMAT = 1 << 0,
-    UNDEFINED_FORMAT = 1 << 1
+
+    // Should be used to print general informations about a process.
+    GENERAL_FORMAT = 0,
+
+    // Should be used to print informations related to the process runtime.
+    RUNTIME_FORMAT = 1
+
 } AwesomePsFormat;
