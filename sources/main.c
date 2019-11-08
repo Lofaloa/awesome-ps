@@ -84,10 +84,6 @@ int main(int argc, char **argv)
         char * name;
         name = findUserName(userId);
         printf("Voici le nom de l'user qui a lancé le process : %s \n", name);
-        
-        int authorId;
-        authorId = findFileUserId(pid);
-        printf("Voici l'id du créateur de l'executable  : %d \n", authorId);
     }
     else
     {

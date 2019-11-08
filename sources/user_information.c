@@ -1,12 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <fcntl.h>
-
+#define _GNU_SOURCE
 
 #include "user_information.h"
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef int bool;
 
@@ -62,7 +63,7 @@ char* findUserName(int userId)
     int i = 0;
     
     fp = fopen("/etc/passwd","r");
-    if(fp==NULL) return(-1);
+    if(fp==NULL) return NULL;
     while((read = getline(&line, &length, fp)) != -1)
     {
         i=0;
@@ -76,43 +77,7 @@ char* findUserName(int userId)
     fclose(fp);
     if(line) free(line);
     
-    return -1;
+    return NULL;
 }
-
-
-int findFileUserId(int pid)
-{
-    FILE * fp;
-    char filePath[30];
-    char * pathName;
-    char * line;
-    char * symbolicLink;
-    size_t symbolicLinkSize;
-    struct stat linkStats;
-    size_t length = 0;
-    ssize_t read;
-    int i = 0;
-    
-    sprintf(filePath,"/proc/%d/exe",pid);
-    
-    fp = fopen(filePath,"r");
-    
-    while((read=getline(&line, &length, fp)) != -1)
-    {
-        pathName = line; 
-    }
-    fclose(fp);
-    if(line) free(line);
-    
-    readlink(pathName, symbolicLink, symbolicLinkSize);
-    
-    if(lstat(symbolicLink, &linkStats) == 0)
-    {
-        return (int)linkStats.st_uid;
-    }else{
-        return -1;
-    }
-}
-
 
 

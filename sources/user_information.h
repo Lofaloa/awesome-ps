@@ -16,9 +16,3 @@ int findProcessUserId(int pid);
  */
 char* findUserName(int userId);
 
-/**
- * Find the owner id of the executable corresponding to the pid process and returns it
- * 
- * returns : -1 if fail, userId if sucessful
- */
-int findFileUserId(int pid);
