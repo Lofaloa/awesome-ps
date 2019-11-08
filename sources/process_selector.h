@@ -1,4 +1,4 @@
 enum searchOption{NORMAL, USER, STATUS};
 
-void searchProcesses(int *pids, searchOption option, char* parameter);
+void searchProcesses(int *pids,enum searchOption option, char* parameter);
 
