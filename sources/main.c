@@ -50,9 +50,28 @@ void showProcessStatusInformationFor(const int pid)
     }
 }
 
-void showAllProcesses() {
+void showAllProcesses(enum searchOption option) {
     int pids[1000];
-    searchProcesses(pids);
+    
+    switch(option)
+    {
+        case NULL:
+            searchProcesses(pids, NULL, NULL);
+            break;
+            
+        case STATUS:
+            //Implement code to search specific status
+            break;
+            
+        case USER:
+            //Implement code to search specific user
+            break;
+        
+        default:
+            searchProcesses(pids, NULL, NULL);
+    }
+    
+    
     int current = 0;
     printTableHeader();
     while (pids[current] >= 0)
@@ -67,7 +86,7 @@ int main(int argc, char **argv)
 {
     if (argc == 1)
     {
-        showAllProcesses();
+        showAllProcesses(NULL);
         return 1;
     }
     else if (argc == 2)

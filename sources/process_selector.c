@@ -28,7 +28,7 @@ long parseProcessDirectoryName(char *dirname)
     }
 }
 
-void searchProcesses(int *pid_array)
+void searchProcesses(int *pid_array,enum searchOption option, char* parameter)
 {
     if (pid_array != NULL) {
         struct dirent *entry;
@@ -41,8 +41,24 @@ void searchProcesses(int *pid_array)
                 long pid;
                 if ((pid = parseProcessDirectoryName(entry->d_name)))
                 {
-                    pid_array[current] = pid;
-                    current++;
+                    switch(searchOption)
+                    {
+                        case NULL:
+                            pid_array[current] = pid;
+                            current++;
+                            break;
+                            
+                        case STATUS:
+                            //IMPLEMENT STATUS SEARCH BASED CODE
+                            break;
+                            
+                        case USER:
+                            //IMPLEMENT USER SEARCH BASED CODE
+                            
+                        default:
+                            pid_array[current] = pid;
+                            current++;
+                    }
                 }
             }
             pid_array[current] = -1;
