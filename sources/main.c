@@ -3,11 +3,37 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
 
 #include "status_information_scanner.h"
 #include "awesomeps_formats.h"
 #include "process_selector.h"
 #include "awesomepsio.h"
+
+// Defines available commandline options for this tool
+#define RUNTIME_OPTION "runtime"
+#define PAGING_OPTION "paging"
+
+/* Converts the given option to its corresponding format.
+ *
+ * If the given option is unknown or NULL, GENERAL_FORMAT is returned.
+ */
+awesomeps_format optionToFormat(char *option)
+{
+    awesomeps_format format = GENERAL_FORMAT;
+    if (option != NULL)
+    {
+        if (strcmp(RUNTIME_OPTION, option) == 0)
+        {
+            format = RUNTIME_FORMAT;
+        }
+        else if (strcmp(PAGING_OPTION, option) == 0)
+        {
+            format = PAGING_FORMAT;
+        }
+    }
+    return format;
+}
 
 /**
  * Parses a string representing a pid and convert it to a long integer. The
@@ -30,13 +56,12 @@ long parsePID(char *str)
     }
     if (endptr == str || *endptr != '\0')
     {
-        printf("PID parsing error: '%s' could not be parsed.\n", str);
-        exit(-1);
+        pid = -1;
     }
     return pid;
 }
 
-void showProcessStatusInformationFor(const int pid)
+void showProcessStatusInformationFor(const int pid, awesomeps_format format)
 {
     status_information information;
     if (scanStatusInformation(pid, &information) == -1)
@@ -46,18 +71,19 @@ void showProcessStatusInformationFor(const int pid)
     }
     else
     {
-        printProcessInformations(&information, GENERAL_FORMAT);
+        printProcessInformations(&information, format);
     }
 }
 
-void showAllProcesses() {
+void printInformationsForAllProcesses(awesomeps_format format)
+{
     int pids[1000];
     searchProcesses(pids);
     int current = 0;
     printTableHeader();
     while (pids[current] >= 0)
     {
-        showProcessStatusInformationFor(pids[current]);
+        showProcessStatusInformationFor(pids[current], format);
         current++;
     }
     printRowSeparator();
@@ -67,19 +93,30 @@ int main(int argc, char **argv)
 {
     if (argc == 1)
     {
-        showAllProcesses();
+        printInformationsForAllProcesses(GENERAL_FORMAT);
         return 1;
     }
     else if (argc == 2)
-    {
+    { 
         long pid = parsePID(argv[1]);
-        printTableHeader();
-        showProcessStatusInformationFor(pid);
-        printRowSeparator();
+        if (pid < 0) {
+            awesomeps_format format = optionToFormat(argv[1]);
+            printInformationsForAllProcesses(format);
+        } else {
+            printTableHeader();
+            showProcessStatusInformationFor(pid, GENERAL_FORMAT);
+            printRowSeparator();
+        }
+    }
+    else if (argc == 3)
+    {
+        awesomeps_format format = optionToFormat(argv[1]);
+        long pid = parsePID(argv[2]);
+        showProcessStatusInformationFor(pid, format);
     }
     else
     {
-        printf("usage: %s [pid]", argv[0]);
+        printf("usage: %s <OPTIONS> [pid]", argv[0]);
     }
     return 0;
 }
