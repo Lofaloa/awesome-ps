@@ -1,4 +1,12 @@
-enum searchOption{NORMAL, USER, STATUS};
+typedef int bool;
 
-void searchProcesses(int *pids,enum searchOption option, char* parameter);
+#define TRUE 1
+#define FALSE 0
 
+void searchProcesses(int *pids, char option, char* parameter);
+
+bool matchStatus(int pid, char status);
+
+bool matchUser(int pid, char* userName);
+
+bool matchCurrentUser(int pid);

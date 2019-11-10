@@ -1,10 +1,18 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
+#include <unistd.h>
+
+#include "user_information.h"
+#include "status_information_scanner.h"
+#include "process_selector.h"
 
 #define PROC_ROOT "/proc"
+
 
 /* Parses the given directory name. If the directory name contains exclusively
  * digits is parsed and converted to a pid. 
@@ -28,7 +36,7 @@ long parseProcessDirectoryName(char *dirname)
     }
 }
 
-void searchProcesses(int *pid_array,enum searchOption option, char* parameter)
+void searchProcesses(int *pid_array, char searchOption, char* parameter)
 {
     if (pid_array != NULL) {
         struct dirent *entry;
@@ -43,17 +51,20 @@ void searchProcesses(int *pid_array,enum searchOption option, char* parameter)
                 {
                     switch(searchOption)
                     {
-                        case NULL:
-                            pid_array[current] = pid;
-                            current++;
+                        case 's':
+                            if(matchStatus(pid, parameter)
+                            {
+                                pid_array[current] = pid;
+                                current++; 
+                            }
                             break;
                             
-                        case STATUS:
-                            //IMPLEMENT STATUS SEARCH BASED CODE
-                            break;
-                            
-                        case USER:
-                            //IMPLEMENT USER SEARCH BASED CODE
+                        case 'u':
+                            if(matchCurrentUser(pid))
+                            {
+                                pid_array[current] = pid;
+                                current++;  
+                            }
                             
                         default:
                             pid_array[current] = pid;
@@ -68,4 +79,62 @@ void searchProcesses(int *pid_array,enum searchOption option, char* parameter)
         }
         closedir(proc);
     }
+}
+
+
+bool matchCurrentUser(int pid)
+{
+    bool correspondingUser = FALSE ;
+    int userId = findProcessUserId(pid);
+    
+    if(userId == -1)
+    {
+        perror("Cannot find the process user id");
+    }
+    
+    if(userId = (int)getuid())
+    {
+        correspondingUser = TRUE ;
+    }
+    
+    return correspondingUser;
+}
+
+bool matchUser(int pid, int id)
+{
+    bool correspondingUser = FALSE ;
+    int userId = findProcessUserId(pid);
+    
+    if(userId == -1)
+    {
+        perror("Cannot find the process user id");
+    }
+    
+    if(userId = id)
+    {
+        correspondingUser = TRUE ;
+    }
+    
+    return correspondingUser;
+}
+
+
+bool matchStatus(int pid, char status)
+{
+    bool correspondingStatus = FALSE;
+    
+    status_information information;
+    if (scanStatusInformation(pid, &information) == -1)
+    {
+        perror("PID not found: no /proc/%d/stat virtual file was found.\n", pid);
+        return correspondingStatus ;
+    }
+    else
+    {
+        if(information->state == char status)
+        {
+            correspondingStatus = TRUE;
+        }
+    }
+    return correspondingStatus;
 }

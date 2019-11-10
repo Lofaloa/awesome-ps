@@ -50,25 +50,21 @@ void showProcessStatusInformationFor(const int pid)
     }
 }
 
-void showAllProcesses(enum searchOption option) {
+void showAllProcesses(char searchOption) {
     int pids[1000];
     
-    switch(option)
+    switch(searchOption)
     {
-        case NULL:
-            searchProcesses(pids, NULL, NULL);
-            break;
-            
-        case STATUS:
+        case 's':
             //Implement code to search specific status
             break;
             
-        case USER:
+        case 'u':
             //Implement code to search specific user
             break;
         
         default:
-            searchProcesses(pids, NULL, NULL);
+            searchProcesses(pids, 0, 0);
     }
     
     
@@ -86,7 +82,7 @@ int main(int argc, char **argv)
 {
     if (argc == 1)
     {
-        showAllProcesses(NULL);
+        showAllProcesses(0);
         return 1;
     }
     else if (argc == 2)
@@ -103,10 +99,6 @@ int main(int argc, char **argv)
         char * name;
         name = findUserName(userId);
         printf("Voici le nom de l'user qui a lancé le process : %s \n", name);
-        
-        int authorId;
-        authorId = findFileUserId(pid);
-        printf("Voici l'id du créateur de l'executable  : %d \n", authorId);
     }
     else
     {
