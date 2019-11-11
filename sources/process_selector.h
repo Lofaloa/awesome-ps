@@ -10,3 +10,4 @@ bool matchStatus(int pid, char status);
 bool matchUser(int pid, char* userName);
 
 bool matchCurrentUser(int pid);
+

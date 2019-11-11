@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <unistd.h>
+#include <pwd.h>
 
 #include "user_information.h"
 #include "status_information_scanner.h"
@@ -52,7 +53,7 @@ void searchProcesses(int *pid_array, char searchOption, char* parameter)
                     switch(searchOption)
                     {
                         case 's':
-                            if(matchStatus(pid, parameter)
+                            if(matchStatus((int)pid, parameter))
                             {
                                 pid_array[current] = pid;
                                 current++; 
@@ -92,7 +93,7 @@ bool matchCurrentUser(int pid)
         perror("Cannot find the process user id");
     }
     
-    if(userId = (int)getuid())
+    if(userId == (int)getuid())
     {
         correspondingUser = TRUE ;
     }
@@ -100,17 +101,17 @@ bool matchCurrentUser(int pid)
     return correspondingUser;
 }
 
-bool matchUser(int pid, int id)
+bool matchUser(int pid, char* userName)
 {
     bool correspondingUser = FALSE ;
     int userId = findProcessUserId(pid);
-    
+    char* uName = findUserName(userId);
     if(userId == -1)
     {
         perror("Cannot find the process user id");
     }
     
-    if(userId = id)
+    if(uName = userName)
     {
         correspondingUser = TRUE ;
     }
@@ -126,12 +127,12 @@ bool matchStatus(int pid, char status)
     status_information information;
     if (scanStatusInformation(pid, &information) == -1)
     {
-        perror("PID not found: no /proc/%d/stat virtual file was found.\n", pid);
+        perror("PID not found.");
         return correspondingStatus ;
     }
     else
     {
-        if(information->state == char status)
+        if(information.state == status)
         {
             correspondingStatus = TRUE;
         }
