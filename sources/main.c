@@ -92,32 +92,38 @@ void printInformationsForAllProcesses(awesomeps_format format)
 
 int main(int argc, char **argv)
 {
-    if (argc == 1)
+    if (argc > 1)
     {
-        printInformationsForAllProcesses(GENERAL_FORMAT);
+        // printInformationsForAllProcesses(GENERAL_FORMAT);
+        awesomeps_option options[100];
+        readOptions(argc, argv, options);
+        for (unsigned  i = 0; i < argc; i++) {
+            printf("<key: %s, value: %s>\n", options[i].key, options[i].value);
+        }
+        
         return 1;
     }
-    else if (argc == 2)
-    { 
-        long pid = parsePID(argv[1]);
-        if (pid < 0) {
-            awesomeps_format format = optionToFormat(argv[1]);
-            printInformationsForAllProcesses(format);
-        } else {
-            printTableHeader();
-            showProcessStatusInformationFor(pid, GENERAL_FORMAT);
-            printRowSeparator();
-        }
-    }
-    else if (argc == 3)
-    {
-        awesomeps_format format = optionToFormat(argv[1]);
-        long pid = parsePID(argv[2]);
-        showProcessStatusInformationFor(pid, format);
-    }
-    else
-    {
-        printf("usage: %s <OPTIONS> [pid]", argv[0]);
-    }
+    // else if (argc == 2)
+    // { 
+    //     long pid = parsePID(argv[1]);
+    //     if (pid < 0) {
+    //         awesomeps_format format = optionToFormat(argv[1]);
+    //         printInformationsForAllProcesses(format);
+    //     } else {
+    //         printTableHeader();
+    //         showProcessStatusInformationFor(pid, GENERAL_FORMAT);
+    //         printRowSeparator();
+    //     }
+    // }
+    // else if (argc == 3)
+    // {
+    //     awesomeps_format format = optionToFormat(argv[1]);
+    //     long pid = parsePID(argv[2]);
+    //     showProcessStatusInformationFor(pid, format);
+    // }
+    // else
+    // {
+    //     printf("usage: %s <OPTIONS> [pid]", argv[0]);
+    // }
     return 0;
 }
