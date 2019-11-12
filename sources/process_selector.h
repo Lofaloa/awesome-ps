@@ -5,7 +5,7 @@ typedef int bool;
 
 void searchProcesses(int *pids, char option, char* parameter);
 
-bool matchStatus(int pid, char status);
+bool matchStatus(int pid, char* status);
 
 bool matchUser(int pid, char* userName);
 

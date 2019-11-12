@@ -50,17 +50,17 @@ void showProcessStatusInformationFor(const int pid)
     }
 }
 
-void showAllProcesses(char searchOption) {
+void showAllProcesses(char searchOption, char* parameter) {
     int pids[1000];
     
     switch(searchOption)
     {
         case 's':
-            //Implement code to search specific status
+            searchProcesses(pids, searchOption, parameter);
             break;
             
         case 'u':
-            //Implement code to search specific user
+            searchProcesses(pids, searchOption, parameter);
             break;
         
         default:
@@ -72,6 +72,7 @@ void showAllProcesses(char searchOption) {
     printTableHeader();
     while (pids[current] >= 0)
     {
+        printf("%s", findUserName(findProcessUserId(pids[current])));
         showProcessStatusInformationFor(pids[current]);
         current++;
     }
@@ -82,7 +83,10 @@ int main(int argc, char **argv)
 {
     if (argc == 1)
     {
-        showAllProcesses(0);
+        showAllProcesses(0, 0);
+        printf("\n\n\nici c'est le tri \n\n\n");
+        showAllProcesses('u', "root");
+        //showAllProcesses('s', "S");
         return 1;
     }
     else if (argc == 2)

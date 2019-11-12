@@ -61,12 +61,12 @@ void searchProcesses(int *pid_array, char searchOption, char* parameter)
                             break;
                             
                         case 'u':
-                            if(matchCurrentUser(pid))
+                            if(matchUser((int)pid, parameter))
                             {
                                 pid_array[current] = pid;
                                 current++;  
                             }
-                            
+                            break;
                         default:
                             pid_array[current] = pid;
                             current++;
@@ -111,7 +111,8 @@ bool matchUser(int pid, char* userName)
         perror("Cannot find the process user id");
     }
     
-    if(uName = userName)
+    
+    if(strcmp(uName, userName)==0)
     {
         correspondingUser = TRUE ;
     }
@@ -120,10 +121,10 @@ bool matchUser(int pid, char* userName)
 }
 
 
-bool matchStatus(int pid, char status)
+bool matchStatus(int pid, char* status)
 {
     bool correspondingStatus = FALSE;
-    
+    char stateChar = status[0];
     status_information information;
     if (scanStatusInformation(pid, &information) == -1)
     {
@@ -132,7 +133,7 @@ bool matchStatus(int pid, char status)
     }
     else
     {
-        if(information.state == status)
+        if(information.state == stateChar)
         {
             correspondingStatus = TRUE;
         }
