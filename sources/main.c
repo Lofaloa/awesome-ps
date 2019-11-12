@@ -9,6 +9,7 @@
 #include "awesomeps_formats.h"
 #include "process_selector.h"
 #include "awesomepsio.h"
+#include "interaction.h"
 
 // Defines available commandline options for this tool
 #define RUNTIME_OPTION "runtime"
