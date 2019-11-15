@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -6,6 +7,7 @@
 #include <stdio.h>
 
 #include "status_information.h"
+#include "awesomeps_formats.h"
 
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
@@ -90,5 +92,52 @@ void printFullStatusInformation(status_information *information)
         printf("%-15s %lu\n", "vsize", information->vsize);
         printf("%-15s %ld\n", "rss", information->rss);
         printf("%-15s %lu\n", "rsslim", information->rsslim);
+    }
+}
+
+/* Prints general information about the process identified by the given pid.
+ *
+ * General information contain :
+ *     - the process pid
+ *     - the command that executed the process
+ *     - the name of the owner
+ */ 
+void printGeneralInformation(status_information *info) {
+    printf(
+        "| %-10d | %-30s | %-10c |\n", 
+        info->pid,
+        info->comm,
+        info->state
+    );
+}
+
+void printRuntimeInformation(status_information *info) {
+    printf("TODO: Information about runtime for process of pid = %d\n", info->pid);
+}
+
+void printPagingInformation(status_information *info) {
+    printf("TODO: Information about paging for process of pid = %d\n", info->pid);
+}
+
+/* Prints process information using the given format for the specified process.
+ * 
+ * If the given format is unknown, an error message is shown and the program
+ * exits with -1 status.
+ */
+void printProcessInformations(status_information *info, awesomeps_format format)
+{
+    switch (format) {
+        case GENERAL_FORMAT:
+            printGeneralInformation(info);            
+            break;
+        case RUNTIME_FORMAT:
+            printRuntimeInformation(info);
+            break;
+        case PAGING_FORMAT:
+            printPagingInformation(info);
+            break;
+        default:
+            printf("Printing error: %d is an unknown format", format);
+            exit(-1);
     }
 }

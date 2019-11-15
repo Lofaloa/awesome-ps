@@ -3,11 +3,39 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
 
 #include "status_information_scanner.h"
+#include "awesomeps_formats.h"
 #include "process_selector.h"
 #include "awesomepsio.h"
 #include "user_information.h"
+#include "interaction.h"
+
+// Defines available commandline options for this tool
+#define RUNTIME_OPTION "runtime"
+#define PAGING_OPTION "paging"
+
+/* Converts the given option to its corresponding format.
+ *
+ * If the given option is unknown or NULL, GENERAL_FORMAT is returned.
+ */
+awesomeps_format optionToFormat(char *option)
+{
+    awesomeps_format format = GENERAL_FORMAT;
+    if (option != NULL)
+    {
+        if (strcmp(RUNTIME_OPTION, option) == 0)
+        {
+            format = RUNTIME_FORMAT;
+        }
+        else if (strcmp(PAGING_OPTION, option) == 0)
+        {
+            format = PAGING_FORMAT;
+        }
+    }
+    return format;
+}
 
 /**
  * Parses a string representing a pid and convert it to a long integer. The
@@ -30,13 +58,12 @@ long parsePID(char *str)
     }
     if (endptr == str || *endptr != '\0')
     {
-        printf("PID parsing error: '%s' could not be parsed.\n", str);
-        exit(-1);
+        pid = -1;
     }
     return pid;
 }
 
-void showProcessStatusInformationFor(const int pid)
+void showProcessStatusInformationFor(const int pid, awesomeps_format format)
 {
     status_information information;
     if (scanStatusInformation(pid, &information) == -1)
@@ -46,18 +73,19 @@ void showProcessStatusInformationFor(const int pid)
     }
     else
     {
-        printStatusInformation(&information);
+        printProcessInformations(&information, format);
     }
 }
 
-void showAllProcesses() {
+void printInformationsForAllProcesses(awesomeps_format format)
+{
     int pids[1000];
     searchProcesses(pids);
     int current = 0;
     printTableHeader();
     while (pids[current] >= 0)
     {
-        showProcessStatusInformationFor(pids[current]);
+        showProcessStatusInformationFor(pids[current], format);
         current++;
     }
     printRowSeparator();
@@ -65,30 +93,14 @@ void showAllProcesses() {
 
 int main(int argc, char **argv)
 {
-    if (argc == 1)
+    if (argc > 1)
     {
-        showAllProcesses();
+        awesomeps_option options[100];
+        readOptions(argc, argv, options);
+        for (unsigned  i = 0; i < argc; i++) {
+            printf("<key: %s, value: %s>\n", options[i].key, options[i].value);
+        }
         return 1;
     }
-    else if (argc == 2)
-    {
-        long pid = parsePID(argv[1]);
-        printTableHeader();
-        showProcessStatusInformationFor(pid);
-        printRowSeparator();
-        
-        int userId;
-        userId = findProcessUserId(pid);
-        printf("Voici l'id de l'user qui a lancé le process : %d \n", userId);
-        
-        char * name;
-        name = findUserName(userId);
-        printf("Voici le nom de l'user qui a lancé le process : %s \n", name);
-    }
-    else
-    {
-        printf("usage: %s [pid]", argv[0]);
-    }
     return 0;
-
 }
