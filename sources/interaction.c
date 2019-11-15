@@ -46,9 +46,12 @@ void setOptionFromString(char *str, awesomeps_option *option)
 
 void readOptions(int argc, char **argv, awesomeps_option *options)
 {
-    for (unsigned i = 1; i < argc; i++) {
-        awesomeps_option option;
-        setOptionFromString(argv[i], &option);
-        options[i - 1] = option;
+    if (options != NULL)
+    {
+        for (unsigned i = 1; i < argc; i++) {
+            awesomeps_option option;
+            setOptionFromString(argv[i], &option);
+            options[i - 1] = option;
+        }
     }
 }
