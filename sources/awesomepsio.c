@@ -10,9 +10,6 @@
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
 
-// Minor device in contained in the conbination of bits 31 and 20 and 7 to 0
-#define MINOR_DEVICE(dev) ((dev)&0xff)
-
 double clockTicksToSeconds(long unsigned clockTicks)
 {
     double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
@@ -50,7 +47,7 @@ void printStatusInformation(status_information *information)
         information->pid,
         information->comm,
         information->state,
-        information->tty_nr
+        MINOR_DEVICE(information->tty_nr)
     );
 }
 

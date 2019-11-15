@@ -1,6 +1,10 @@
 #ifndef STATUS_INFORMATION_H
 #define STATUS_INFORMATION_H
 
+
+// Minor device in contained in the conbination of bits 31 and 20 and 7 to 0
+#define MINOR_DEVICE(dev) ((dev)&0xff)
+
 /* Holds data scanned from the /proc/[pid]/stat virtual file.
  *
  * All the fields match the data specified in the /proc/[pid]/stat section of
