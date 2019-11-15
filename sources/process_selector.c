@@ -83,17 +83,19 @@ void searchProcesses(int *pid_array, char searchOption, char* parameter)
 }
 
 
-bool matchCurrentUser(int pid)
+bool matchCurrentUserAndTTY(int pid)
 {
     bool correspondingUser = FALSE ;
     int userId = findProcessUserId(pid);
+    char * currentTTY = ttyname(0);
+    char * processTTY = "";
     
     if(userId == -1)
     {
         perror("Cannot find the process user id");
     }
     
-    if(userId == (int)getuid())
+    if( ( userId == (int)getuid() ) &&  (currentTTY == processTTY) )
     {
         correspondingUser = TRUE ;
     }
