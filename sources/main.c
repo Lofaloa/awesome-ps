@@ -96,10 +96,8 @@ int main(int argc, char **argv)
     if (argc > 1)
     {
         awesomeps_option options[100];
-        readOptions(argc, argv, options);
-        for (unsigned  i = 0; i < argc; i++) {
-            printf("<key: %s, value: %s>\n", options[i].key, options[i].value);
-        }
+        parseCommandlineArguments(argc, argv, options);
+        readOptions(options, argc - 1);
         return 1;
     }
     return 0;

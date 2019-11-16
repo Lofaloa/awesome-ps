@@ -85,15 +85,23 @@ void setOptionFromString(char *str, awesomeps_option *option)
     }
 }
 
-void readOptions(int argc, char **argv, awesomeps_option *options)
+void parseCommandlineArguments(int argc, char **argv, awesomeps_option *options)
 {
     if (options != NULL)
     {
         for (unsigned i = 1; i < argc; i++)
         {
+            // TODO: check if a given option has already been used in options
             awesomeps_option option;
             setOptionFromString(argv[i], &option);
             options[i - 1] = option;
         }
+    }
+}
+
+void readOptions(awesomeps_option *options, unsigned count)
+{
+    for (unsigned  i = 0; i < count; i++) {
+        printf("<key: %s, value: %s>\n", options[i].key, options[i].value);
     }
 }
