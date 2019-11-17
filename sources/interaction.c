@@ -31,6 +31,24 @@ static int array_contains(const char **array, unsigned count, char *value)
     return 0;
 }
 
+/**
+ * Tells if the given key has already been set in the specified array of
+ * options.
+ */
+static int isSet(const awesomeps_option *options, unsigned count,
+                 awesomeps_option *option)
+{
+    for (unsigned i = 0; i < count; i++)
+    {
+        awesomeps_option currentOption = options[i];
+        if (strcmp(currentOption.key, option->key) == 0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 /* Tells if the given key is valid. A key is value when it is an available one
  * and is not null.
  */
@@ -49,7 +67,7 @@ static int isValidValueForKey(char *key, char *value)
             return value != NULL && array_contains(statusValues, 4, value);
         }
         else if (strcmp("topic", key) == 0)
-        {            
+        {
             return value != NULL && array_contains(topicValues, 3, value);
         }
     }
@@ -72,11 +90,9 @@ void setOptionFromString(char *str, awesomeps_option *option)
         {
             printf(
                 "Option parsing error: %s isn't a valid value for %s.\n",
-                value, key
-            );
+                value, key);
             exit(-1);
         }
-        
     }
     else
     {
@@ -89,19 +105,26 @@ void parseCommandlineArguments(int argc, char **argv, awesomeps_option *options)
 {
     if (options != NULL)
     {
-        for (unsigned i = 1; i < argc; i++)
+        for (unsigned count = 0, i = 1; i < argc; i++)
         {
-            // TODO: check if a given option has already been used in options
             awesomeps_option option;
             setOptionFromString(argv[i], &option);
-            options[i - 1] = option;
+            if (!isSet(options, count, &option))
+            {
+                options[count] = option;
+                count++;
+            } else {
+                printf("Option parsing error: %s has been set twice\n", option.key);
+                exit(-1);
+            }
         }
     }
 }
 
 void readOptions(awesomeps_option *options, unsigned count)
 {
-    for (unsigned  i = 0; i < count; i++) {
+    for (unsigned i = 0; i < count; i++)
+    {
         printf("<key: %s, value: %s>\n", options[i].key, options[i].value);
     }
 }
