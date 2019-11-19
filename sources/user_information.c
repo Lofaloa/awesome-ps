@@ -1,13 +1,12 @@
-#define _GNU_SOURCE
+#define _GNU_SOURCE
 
-#include "user_information.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+#include "user_information.h"
 
 typedef int bool;
 
@@ -79,5 +78,3 @@ char* findUserName(int userId)
     
     return NULL;
 }
-
-
