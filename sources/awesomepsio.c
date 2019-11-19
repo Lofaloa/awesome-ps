@@ -7,9 +7,32 @@
 #include <stdio.h>
 
 #include "status_information.h"
+#include "awesomeps_configuration.h"
 
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
+
+void show(status_information *info, awesomeps_configuration config)
+{
+    if (config & GENERAL_INFORMATION)
+    {
+        printf("General information ");
+    }
+    else if (config & PAGING_INFORMATION)
+    {
+        printf("Paging information ");
+    }
+    else if (config & RUNTIME_INFORMATION)
+    {
+        printf("Runtime information ");
+    }
+    else
+    {
+        printf("Display error: unkown configuration\n");
+        exit(-1);
+    }
+    printf("for process %d\n", info->pid);
+}
 
 // double clockTicksToSeconds(long unsigned clockTicks)
 // {
@@ -17,39 +40,19 @@
 //     return result;
 // }
 
-void printStartTime(status_information *information) {
+void printStartTime(status_information *information)
+{
     printf("%-15s %llu\n", "starttime", information->starttime);
-}
-
-void printRowSeparator() {
-    printf("+%-12s+%-32s+%-12s+%-12s+\n", 
-        "------------",
-        "--------------------------------",
-        "------------",
-        "------------"
-    );
-}
-
-void printTableHeader() {
-    printRowSeparator();
-    printf("| %-10s | %-30s | %-10s | %-10s |\n", 
-        "PID",
-        "Command",
-        "State",
-        "Terminal"
-    );
-    printRowSeparator();
 }
 
 void printStatusInformation(status_information *information)
 {
     printf(
-        "| %-10d | %-30s | %-10c | %10d |\n", 
+        "| %-10d | %-30s | %-10c | %10d |\n",
         information->pid,
         information->comm,
         information->state,
-        MINOR_DEVICE(information->tty_nr)
-    );
+        MINOR_DEVICE(information->tty_nr));
 }
 
 /**
@@ -100,21 +103,23 @@ void printFullStatusInformation(status_information *information)
  *     - the process pid
  *     - the command that executed the process
  *     - the name of the owner
- */ 
-void printGeneralInformation(status_information *info) {
+ */
+void printGeneralInformation(status_information *info)
+{
     printf(
-        "| %-10d | %-30s | %-10c |\n", 
+        "| %-10d | %-30s | %-10c |\n",
         info->pid,
         info->comm,
-        info->state
-    );
+        info->state);
 }
 
-void printRuntimeInformation(status_information *info) {
+void printRuntimeInformation(status_information *info)
+{
     printf("TODO: Information about runtime for process of pid = %d\n", info->pid);
 }
 
-void printPagingInformation(status_information *info) {
+void printPagingInformation(status_information *info)
+{
     printf("TODO: Information about paging for process of pid = %d\n", info->pid);
 }
 
@@ -127,7 +132,7 @@ void printPagingInformation(status_information *info) {
 // {
 //     switch (format) {
 //         case GENERAL_FORMAT:
-//             printGeneralInformation(info);            
+//             printGeneralInformation(info);
 //             break;
 //         case RUNTIME_FORMAT:
 //             printRuntimeInformation(info);

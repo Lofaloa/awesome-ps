@@ -12,6 +12,10 @@ int main(int argc, char **argv)
     if (argc > 1)
     {
         runWithOptions(argc, argv);
+    } if (argc == 1) {
+        // TODO: show general information for processes of the current terminal
+    } else {
+        // TODO: show help to the user
     }
     return 0;
 }

@@ -1,6 +1,4 @@
 #include "status_information.h"
+#include "awesomeps_configuration.h"
 
-void printTableHeader();
-void printRowSeparator();
-void printStatusInformation(status_information *information);
-void printFullStatusInformation(status_information *information);
+void show(status_information *, awesomeps_configuration);
