@@ -69,7 +69,9 @@ static int isValidValueForKey(char *key, char *value)
         else if (strcmp("topic", key) == 0)
         {
             return value != NULL && array_contains(topicValues, 3, value);
-        } else {
+        }
+        else
+        {
             return 1;
         }
     }
@@ -115,7 +117,9 @@ void parseCommandlineArguments(int argc, char **argv, awesomeps_option *options)
             {
                 options[count] = option;
                 count++;
-            } else {
+            }
+            else
+            {
                 printf("Option parsing error: %s has been set twice\n", option.key);
                 exit(-1);
             }
