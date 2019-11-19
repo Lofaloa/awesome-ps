@@ -10,13 +10,13 @@
 \parindent 0cm		% Pas d'indentation de paragraphe
 % -----------------------------------------------------
 \usepackage[T1]{fontenc}
-\usepackage{graphicx,color, caption2}
+%\usepackage{graphicx,color, caption2}
 \usepackage{epsfig}
 \usepackage{fancyhdr}
 %\usepackage{fancyvrb}
 \usepackage{textcomp}
 \pagestyle{fancy}
-\usepackage{listings}		% pour incorporer des sources
+%\usepackage{listings}		% pour incorporer des sources
 \usepackage[francais]{layout}	% pour obtenir le layout
 \usepackage{fullpage}		% pour obtenir le layout
 \usepackage{makeidx}		% pour créer une table d'index
@@ -39,12 +39,13 @@
 \author{Alexandre Baudot et Logan Farci}
 \date{22 novembre 2019}
 \maketitle
+\newpage
+
 \tableofcontents
-\section{Introduction}
-% \subsection{Intérêts}
 
 % Inclusion des textes
-\include{introduction}
+\newpage
+\input{./report/introduction}
 
 \printindex			% Impression de la table des index
 \end{document}
