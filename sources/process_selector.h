@@ -1,0 +1,1 @@
+void searchProcesses(int *pids);
