@@ -7,10 +7,12 @@
 #include <errno.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <ctype.h>
 
 #include "user_information.h"
 #include "status_information_scanner.h"
 #include "process_selector.h"
+#include "awesomepsio.c"
 
 #define PROC_ROOT "/proc"
 
@@ -52,6 +54,15 @@ void searchProcesses(int *pid_array, char searchOption, char* parameter)
                 {
                     switch(searchOption)
                     {
+                        case 'c':
+                            if(matchCurrentUserAndTTY((int)pid))
+                            {
+                                pid_array[current] = pid;
+                                current++; 
+                            }
+                            
+                            break;
+                        
                         case 's':
                             if(matchStatus((int)pid, parameter))
                             {
@@ -85,22 +96,41 @@ void searchProcesses(int *pid_array, char searchOption, char* parameter)
 
 bool matchCurrentUserAndTTY(int pid)
 {
-    bool correspondingUser = FALSE ;
+    bool correspondingUserAndTTY = FALSE ;
+    status_information information;
     int userId = findProcessUserId(pid);
     char * currentTTY = ttyname(0);
-    char * processTTY = "";
+    int ttyNr = -1 ;
+    
+    int i = 0;
+    char *tokens[30];
+    
+    tokens[i]=strtok(currentTTY,"/");
+    while (tokens[i] != NULL) tokens[++i]=strtok(NULL," ");
+    if(isdigit(tokens[2][0]) != 0)
+    {
+        ttyNr = (int)tokens[2][0];
+    }
+    
     
     if(userId == -1)
     {
         perror("Cannot find the process user id");
     }
     
-    if( ( userId == (int)getuid() ) &&  (currentTTY == processTTY) )
+    if (scanStatusInformation(pid, &information) == -1)
     {
-        correspondingUser = TRUE ;
+        perror("PID not found.");
+        return correspondingUserAndTTY ;
     }
-    
-    return correspondingUser;
+    else 
+    {
+        if((userId == (int)getuid()) &&  (ttyNr == MINOR_DEVICE(information.tty_nr)))
+        {
+            correspondingUserAndTTY = TRUE;
+        }
+    }
+    return correspondingUserAndTTY;
 }
 
 bool matchUser(int pid, char* userName)
