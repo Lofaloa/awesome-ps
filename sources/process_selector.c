@@ -107,11 +107,10 @@ bool matchCurrentUserAndTTY(int pid)
     
     tokens[i]=strtok(currentTTY,"/");
     while (tokens[i] != NULL) tokens[++i]=strtok(NULL," ");
-    if(isdigit(tokens[2][0]) != 0)
+    if(isdigit(tokens[1][4]) != 0)
     {
-        ttyNr = (int)tokens[2][0];
+        ttyNr = tokens[1][4] - '0'; //Converting char to int
     }
-    
     
     if(userId == -1)
     {
