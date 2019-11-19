@@ -12,11 +12,29 @@
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
 
+/* Prints general information about the process identified by the given pid.
+ *
+ * General information contain :
+ *     - the process pid
+ *     - the command that executed the process
+ *     - the name of the owner
+ */
+void printGeneralInformation(status_information *info)
+{
+    printf(
+        "%-10d %-30s %-10c %3d\n",
+        info->pid,
+        info->comm,
+        info->state,
+        MINOR_DEVICE(info->tty_nr)
+    );
+}
+
 void show(status_information *info, awesomeps_configuration config)
 {
     if (config & GENERAL_INFORMATION)
     {
-        printf("General information ");
+        printGeneralInformation(info);
     }
     else if (config & PAGING_INFORMATION)
     {
@@ -31,7 +49,6 @@ void show(status_information *info, awesomeps_configuration config)
         printf("Display error: unkown configuration\n");
         exit(-1);
     }
-    printf("for process %d\n", info->pid);
 }
 
 // double clockTicksToSeconds(long unsigned clockTicks)
@@ -95,22 +112,6 @@ void printFullStatusInformation(status_information *information)
         printf("%-15s %ld\n", "rss", information->rss);
         printf("%-15s %lu\n", "rsslim", information->rsslim);
     }
-}
-
-/* Prints general information about the process identified by the given pid.
- *
- * General information contain :
- *     - the process pid
- *     - the command that executed the process
- *     - the name of the owner
- */
-void printGeneralInformation(status_information *info)
-{
-    printf(
-        "| %-10d | %-30s | %-10c |\n",
-        info->pid,
-        info->comm,
-        info->state);
 }
 
 void printRuntimeInformation(status_information *info)
