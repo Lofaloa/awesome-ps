@@ -80,7 +80,6 @@ void showProcessStatusInformationFor(const int pid, awesomeps_format format)
 void printInformationsForAllProcesses(awesomeps_format format)
 {
     int pids[1000];
-    searchProcesses(pids);
     int current = 0;
     printTableHeader();
     while (pids[current] >= 0)

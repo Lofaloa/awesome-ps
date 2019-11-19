@@ -1,10 +1,21 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
+#include <unistd.h>
+#include <pwd.h>
+#include <ctype.h>
+
+#include "user_information.h"
+#include "status_information_scanner.h"
+#include "process_selector.h"
+#include "awesomepsio.h"
 
 #define PROC_ROOT "/proc"
+
 
 /* Parses the given directory name. If the directory name contains exclusively
  * digits is parsed and converted to a pid. 
@@ -28,7 +39,7 @@ long parseProcessDirectoryName(char *dirname)
     }
 }
 
-void searchProcesses(int *pid_array)
+void searchProcesses(int *pid_array, char searchOption, char* parameter)
 {
     if (pid_array != NULL) {
         struct dirent *entry;
@@ -41,8 +52,36 @@ void searchProcesses(int *pid_array)
                 long pid;
                 if ((pid = parseProcessDirectoryName(entry->d_name)))
                 {
-                    pid_array[current] = pid;
-                    current++;
+                    switch(searchOption)
+                    {
+                        case 'c':
+                            if(matchCurrentUserAndTTY((int)pid))
+                            {
+                                pid_array[current] = pid;
+                                current++; 
+                            }
+                            
+                            break;
+                        
+                        case 's':
+                            if(matchStatus((int)pid, parameter))
+                            {
+                                pid_array[current] = pid;
+                                current++; 
+                            }
+                            break;
+                            
+                        case 'u':
+                            if(matchUser((int)pid, parameter))
+                            {
+                                pid_array[current] = pid;
+                                current++;  
+                            }
+                            break;
+                        default:
+                            pid_array[current] = pid;
+                            current++;
+                    }
                 }
             }
             pid_array[current] = -1;
@@ -52,4 +91,84 @@ void searchProcesses(int *pid_array)
         }
         closedir(proc);
     }
+}
+
+
+bool matchCurrentUserAndTTY(int pid)
+{
+    bool correspondingUserAndTTY = FALSE ;
+    status_information information;
+    int userId = findProcessUserId(pid);
+    char * currentTTY = ttyname(0);
+    int ttyNr = -1 ;
+    
+    int i = 0;
+    char *tokens[30];
+    
+    tokens[i]=strtok(currentTTY,"/");
+    while (tokens[i] != NULL) tokens[++i]=strtok(NULL," ");
+    if(isdigit(tokens[2][0]) != 0)
+    {
+        ttyNr = (int)tokens[2][0];
+    }
+    
+    
+    if(userId == -1)
+    {
+        perror("Cannot find the process user id");
+    }
+    
+    if (scanStatusInformation(pid, &information) == -1)
+    {
+        perror("PID not found.");
+        return correspondingUserAndTTY ;
+    }
+    else 
+    {
+        if((userId == (int)getuid()) &&  (ttyNr == MINOR_DEVICE(information.tty_nr)))
+        {
+            correspondingUserAndTTY = TRUE;
+        }
+    }
+    return correspondingUserAndTTY;
+}
+
+bool matchUser(int pid, char* userName)
+{
+    bool correspondingUser = FALSE ;
+    int userId = findProcessUserId(pid);
+    char* uName = findUserName(userId);
+    if(userId == -1)
+    {
+        perror("Cannot find the process user id");
+    }
+    
+    
+    if(strcmp(uName, userName)==0)
+    {
+        correspondingUser = TRUE ;
+    }
+    
+    return correspondingUser;
+}
+
+
+bool matchStatus(int pid, char* status)
+{
+    bool correspondingStatus = FALSE;
+    char stateChar = status[0];
+    status_information information;
+    if (scanStatusInformation(pid, &information) == -1)
+    {
+        perror("PID not found.");
+        return correspondingStatus ;
+    }
+    else
+    {
+        if(information.state == stateChar)
+        {
+            correspondingStatus = TRUE;
+        }
+    }
+    return correspondingStatus;
 }

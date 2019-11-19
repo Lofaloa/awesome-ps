@@ -12,11 +12,11 @@
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
 
-double clockTicksToSeconds(long unsigned clockTicks)
-{
-    double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
-    return result;
-}
+// double clockTicksToSeconds(long unsigned clockTicks)
+// {
+//     double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
+//     return result;
+// }
 
 void printStartTime(status_information *information) {
     printf("%-15s %llu\n", "starttime", information->starttime);
@@ -77,10 +77,10 @@ void printFullStatusInformation(status_information *information)
         printf("%-15s %lu\n", "majflt", information->majflt);
         printf("%-15s %lu\n", "cmajflt", information->cmajflt);
 
-        printf("%-15s %.2f seconds\n", "utime", clockTicksToSeconds(information->utime));
-        printf("%-15s %.2f seconds\n", "stime", clockTicksToSeconds(information->stime));
-        printf("%-15s %.2f seconds\n", "cutime", clockTicksToSeconds(information->cutime));
-        printf("%-15s %.2f seconds\n", "cstime", clockTicksToSeconds(information->cstime));
+        // printf("%-15s %.2f seconds\n", "utime", clockTicksToSeconds(information->utime));
+        // printf("%-15s %.2f seconds\n", "stime", clockTicksToSeconds(information->stime));
+        // printf("%-15s %.2f seconds\n", "cutime", clockTicksToSeconds(information->cutime));
+        // printf("%-15s %.2f seconds\n", "cstime", clockTicksToSeconds(information->cstime));
 
         printf("%-15s %ld\n", "priority", information->priority);
         printf("%-15s %ld\n", "nice", information->nice);
