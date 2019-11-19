@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 #include "status_information.h"
-#include "awesomeps_formats.h"
 
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
@@ -124,20 +123,20 @@ void printPagingInformation(status_information *info) {
  * If the given format is unknown, an error message is shown and the program
  * exits with -1 status.
  */
-void printProcessInformations(status_information *info, awesomeps_format format)
-{
-    switch (format) {
-        case GENERAL_FORMAT:
-            printGeneralInformation(info);            
-            break;
-        case RUNTIME_FORMAT:
-            printRuntimeInformation(info);
-            break;
-        case PAGING_FORMAT:
-            printPagingInformation(info);
-            break;
-        default:
-            printf("Printing error: %d is an unknown format", format);
-            exit(-1);
-    }
-}
+// void printProcessInformations(status_information *info, awesomeps_format format)
+// {
+//     switch (format) {
+//         case GENERAL_FORMAT:
+//             printGeneralInformation(info);            
+//             break;
+//         case RUNTIME_FORMAT:
+//             printRuntimeInformation(info);
+//             break;
+//         case PAGING_FORMAT:
+//             printPagingInformation(info);
+//             break;
+//         default:
+//             printf("Printing error: %d is an unknown format", format);
+//             exit(-1);
+//     }
+// }
