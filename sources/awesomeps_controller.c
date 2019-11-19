@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 
 #include "awesomeps_configuration.h"

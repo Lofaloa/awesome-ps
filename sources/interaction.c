@@ -69,6 +69,8 @@ static int isValidValueForKey(char *key, char *value)
         else if (strcmp("topic", key) == 0)
         {
             return value != NULL && array_contains(topicValues, 3, value);
+        } else {
+            return 1;
         }
     }
     return 0;
