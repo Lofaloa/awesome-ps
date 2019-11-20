@@ -22,12 +22,25 @@
 void printGeneralInformation(status_information *info)
 {
     printf(
-        "%-10d %-30s %-10c %3d\n",
+        "<pid: %-10d command: %-40s status: %-1c tty: %3d>\n",
         info->pid,
         info->comm,
         info->state,
         MINOR_DEVICE(info->tty_nr)
     );
+}
+
+void printRuntimeInformation(status_information *info)
+{
+    printf("TODO: Information about runtime for process of pid = %d\n", info->pid);
+}
+
+/**
+ * Prints information related to the paging.
+ */
+void printPagingInformation(status_information *info)
+{
+    printf("TODO: Information about paging for process of pid = %d\n", info->pid);
 }
 
 void show(status_information *info, awesomeps_configuration config)
@@ -38,11 +51,11 @@ void show(status_information *info, awesomeps_configuration config)
     }
     else if (config & PAGING_INFORMATION)
     {
-        printf("Paging information ");
+        printf("Paging information");
     }
     else if (config & RUNTIME_INFORMATION)
     {
-        printf("Runtime information ");
+        printf("Runtime information");
     }
     else
     {
@@ -60,16 +73,6 @@ void show(status_information *info, awesomeps_configuration config)
 void printStartTime(status_information *information)
 {
     printf("%-15s %llu\n", "starttime", information->starttime);
-}
-
-void printStatusInformation(status_information *information)
-{
-    printf(
-        "| %-10d | %-30s | %-10c | %10d |\n",
-        information->pid,
-        information->comm,
-        information->state,
-        MINOR_DEVICE(information->tty_nr));
 }
 
 /**
@@ -113,36 +116,3 @@ void printFullStatusInformation(status_information *information)
         printf("%-15s %lu\n", "rsslim", information->rsslim);
     }
 }
-
-void printRuntimeInformation(status_information *info)
-{
-    printf("TODO: Information about runtime for process of pid = %d\n", info->pid);
-}
-
-void printPagingInformation(status_information *info)
-{
-    printf("TODO: Information about paging for process of pid = %d\n", info->pid);
-}
-
-/* Prints process information using the given format for the specified process.
- * 
- * If the given format is unknown, an error message is shown and the program
- * exits with -1 status.
- */
-// void printProcessInformations(status_information *info, awesomeps_format format)
-// {
-//     switch (format) {
-//         case GENERAL_FORMAT:
-//             printGeneralInformation(info);
-//             break;
-//         case RUNTIME_FORMAT:
-//             printRuntimeInformation(info);
-//             break;
-//         case PAGING_FORMAT:
-//             printPagingInformation(info);
-//             break;
-//         default:
-//             printf("Printing error: %d is an unknown format", format);
-//             exit(-1);
-//     }
-// }
