@@ -25,6 +25,7 @@ OBJECTS_DIRECTORY = $(TARGET_DIRECTORY)/objects
 
 report: $(REPORT_MAIN_SOURCE)
 	@pdflatex -output-directory=$(TARGET_DIRECTORY) -jobname=$(REPORT_FILE_NAME) $<
+	@pdflatex -output-directory=$(TARGET_DIRECTORY) -jobname=$(REPORT_FILE_NAME) $<
 	@rm $(TARGET_DIRECTORY)/*.aux $(TARGET_DIRECTORY)/*.log $(TARGET_DIRECTORY)/*.toc 
 
 compile: $(FILES)
