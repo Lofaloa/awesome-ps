@@ -40,7 +40,13 @@ void printRuntimeInformation(status_information *info)
  */
 void printPagingInformation(status_information *info)
 {
-    printf("TODO: Information about paging for process of pid = %d\n", info->pid);
+    printf(
+        "<pid: %-10d command: %-40s minor faults: %-10lu major faults: %-10lu>\n",
+        info->pid,
+        info->comm,
+        info->minflt,
+        info->majflt
+    );
 }
 
 void show(status_information *info, awesomeps_configuration config)
@@ -51,7 +57,7 @@ void show(status_information *info, awesomeps_configuration config)
     }
     else if (config & PAGING_INFORMATION)
     {
-        printf("Paging information");
+        printPagingInformation(info);
     }
     else if (config & RUNTIME_INFORMATION)
     {
