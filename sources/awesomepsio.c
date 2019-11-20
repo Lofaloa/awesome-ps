@@ -12,6 +12,42 @@
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
 
+typedef struct time {
+    unsigned hours;
+    unsigned minutes;
+    unsigned seconds;
+} hms_time;
+
+static double clockTicksToSeconds(long unsigned clockTicks)
+{
+    double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
+    return result;
+}
+
+static void secondsToHMS(long unsigned seconds, hms_time *time)
+{
+    if (time != NULL)
+    {
+        time->hours = seconds / 3600;
+        long unsigned remainder = seconds % 3600;
+        time->minutes = remainder / 60;
+        time->seconds = remainder % 60;
+    }
+}
+
+static void sprintfTime(long unsigned clockTicks, char *buffer)
+{
+    hms_time time;
+    secondsToHMS(clockTicksToSeconds(clockTicks), &time);
+    sprintf(
+        buffer,
+        "%02u:%02u:%02u",
+        time.hours,
+        time.minutes,
+        time.seconds
+    );
+}
+
 /* Prints general information about the process identified by the given pid.
  *
  * General information contain :
@@ -30,9 +66,19 @@ void printGeneralInformation(status_information *info)
     );
 }
 
-void printRuntimeInformation(status_information *info)
+void printTimeInformation(status_information *info)
 {
-    printf("TODO: Information about runtime for process of pid = %d\n", info->pid);
+    char userTimeBuffer[BUFFER_SIZE];
+    char kernelTimeBuffer[BUFFER_SIZE];
+    sprintfTime(info->utime, userTimeBuffer);
+    sprintfTime(info->stime, kernelTimeBuffer);
+    printf(
+        "< %-10d %-40s %-15s %-15s>\n",
+        info->pid,
+        info->comm,
+        userTimeBuffer,
+        kernelTimeBuffer
+    );
 }
 
 /**
@@ -59,9 +105,9 @@ void show(status_information *info, awesomeps_configuration config)
     {
         printPagingInformation(info);
     }
-    else if (config & RUNTIME_INFORMATION)
+    else if (config & TIME_INFORMATION)
     {
-        printf("Runtime information");
+        printTimeInformation(info);
     }
     else
     {
@@ -69,12 +115,6 @@ void show(status_information *info, awesomeps_configuration config)
         exit(-1);
     }
 }
-
-// double clockTicksToSeconds(long unsigned clockTicks)
-// {
-//     double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
-//     return result;
-// }
 
 void printStartTime(status_information *information)
 {

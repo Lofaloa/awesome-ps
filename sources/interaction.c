@@ -17,7 +17,7 @@
 
 static const char *keys[] = {"user", "status", "topic"};
 static const char *statusValues[] = {"running", "sleeping", "waiting", "zombie"};
-static const char *topicValues[] = {"paging", "general", "runtime"};
+static const char *topicValues[] = {"paging", "general", "time"};
 
 static int array_contains(const char **array, unsigned count, char *value)
 {

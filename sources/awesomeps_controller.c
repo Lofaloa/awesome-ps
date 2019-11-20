@@ -32,9 +32,9 @@ void setConfiguration(awesomeps_configuration *config, awesomeps_option *opt)
         {
             *config |= GENERAL_INFORMATION;
         }
-        if (strcmp("runtime", opt->value) == 0)
+        if (strcmp("time", opt->value) == 0)
         {
-            *config |= GENERAL_INFORMATION;
+            *config |= TIME_INFORMATION;
         }
     }
 }
