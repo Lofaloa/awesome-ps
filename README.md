@@ -15,7 +15,6 @@ Available options:
    help            Prints the list of available options
 $ >
 ```
-
 ### Utilisation de AwesomePs
 *AwesomePs* permet à l'utilisateur de spécifier une série d'options à l'exécution du programme. Ces paramètres passés en ligne de commande fonctionne en suivant un modèle de clé et de valeur. Vous trouverez ici, une description détaillée de ces options.
 
