@@ -4,7 +4,7 @@ Dans cette section, nous commençons par décrire brièvement le système de fic
 \subsection{Lecture du fichier /proc/[pid]/stat}
 \subsubsection{Ce que nous apprend la documentation}
 Le fichier contient les informations qui concernent l’état d'un processus. Si l'on consulte son contenu, on y trouve une suite de données peu lisible.
-Pour les comprendre et les utiliser, les pages de manuel (man 5 proc) nous explique que les données y sont rangées dans l'ordre séparées par un espace. Pour en extraire ses données, la documentation nous recommande d'utiliser la fonction scanf(3) de la librairie standard. La documentation spécifie un format pour chaque donnée. Par exemple, state est un caractère (%c).
+Pour les comprendre et les utiliser, les pages de manuel (man 5 proc) nous explique que les données y sont rangées dans l'ordre séparées par un espace. Pour en extraire ses données, la documentation nous recommande d'utiliser la fonction scanf(3) de la librairie standard. La documentation spécifie un format pour chaque donnée. Par exemple, state est un caractère (\%c).
 
 \subsubsection{Implémentation de la lecture}
 Nous commençons par écrire une structure de données capable de faire le lien entre le fichier et notre programme. Notre objectif est de récupérer et d’utiliser les valeurs qui y sont contenues.
