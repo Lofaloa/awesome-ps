@@ -57,6 +57,7 @@ awesomeps_configuration getConfiguration(const awesomeps_option *options, unsign
 void runWithOptions(unsigned argc, char **argv)
 {
     int pids[1000];
+    status_information informations[1000];
     unsigned current = 0;
     awesomeps_option options[100];
     awesomeps_configuration configuration = EMPTY;
@@ -77,7 +78,8 @@ void runWithOptions(unsigned argc, char **argv)
     {
         status_information information;
         scanStatusInformation(pids[current], &information);
-        show(&information, configuration);
+        informations[current] = information;
         current++;
     }
+    showAll(informations, current, configuration);
 }

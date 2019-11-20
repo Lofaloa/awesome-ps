@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <time.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "status_information.h"
 #include "awesomeps_configuration.h"
@@ -17,6 +18,11 @@ typedef struct time {
     unsigned minutes;
     unsigned seconds;
 } hms_time;
+
+const char *generalColumnNames[] = {"PID", "COMMANDE", "STATE", "TERMINAL", NULL};
+const char *timeColumnNames[] = {"PID", "COMMANDE", "USER TIME", "KERNEL TIME", NULL};
+const char *pagingColumnNames[] = {"PID", "COMMANDE", "MINOR FAULTS", "MAJOR FAULTS", NULL};
+
 
 static double clockTicksToSeconds(long unsigned clockTicks)
 {
@@ -48,6 +54,34 @@ static void sprintfTime(long unsigned clockTicks, char *buffer)
     );
 }
 
+/**
+ * Prints the header of a table. The argument is a null terminated array
+ * of strings.
+ */
+static void printTableHeader(const char **columnNames)
+{
+    unsigned current = 0;
+    char buffer[256];
+    char separator[256];
+    buffer[0] = '|';
+    separator[0] = '+';
+    separator[1] = 0; // just a work around, without it random char are printed
+    while (columnNames[current] != NULL)
+    {
+        sprintf(
+            separator + strlen(separator),
+            "%-30s+", 
+            "------------------------------"
+        );
+        sprintf(buffer + strlen(buffer), "%-30s|", columnNames[current]);
+        current++;
+    }
+    printf("%s\n", separator);
+    printf("%s\n", buffer);
+    printf("%s\n", separator);
+}
+
+
 /* Prints general information about the process identified by the given pid.
  *
  * General information contain :
@@ -55,10 +89,10 @@ static void sprintfTime(long unsigned clockTicks, char *buffer)
  *     - the command that executed the process
  *     - the name of the owner
  */
-void printGeneralInformation(status_information *info)
+static void printGeneralInformation(const status_information *info)
 {
     printf(
-        "<pid: %-10d command: %-40s status: %-1c tty: %3d>\n",
+        "|%-30d|%-30s|%-30c|%30d|\n",
         info->pid,
         info->comm,
         info->state,
@@ -66,14 +100,14 @@ void printGeneralInformation(status_information *info)
     );
 }
 
-void printTimeInformation(status_information *info)
+static void printTimeInformation(const status_information *info)
 {
     char userTimeBuffer[BUFFER_SIZE];
     char kernelTimeBuffer[BUFFER_SIZE];
     sprintfTime(info->utime, userTimeBuffer);
     sprintfTime(info->stime, kernelTimeBuffer);
     printf(
-        "< %-10d %-40s %-15s %-15s>\n",
+        "|%-30d|%-30s|%-30s|%-30s|\n",
         info->pid,
         info->comm,
         userTimeBuffer,
@@ -84,10 +118,10 @@ void printTimeInformation(status_information *info)
 /**
  * Prints information related to the paging.
  */
-void printPagingInformation(status_information *info)
+static void printPagingInformation(const status_information *info)
 {
     printf(
-        "<pid: %-10d command: %-40s minor faults: %-10lu major faults: %-10lu>\n",
+        "|%-30d|%-30s|%-30lu|%-30lu|\n",
         info->pid,
         info->comm,
         info->minflt,
@@ -95,7 +129,7 @@ void printPagingInformation(status_information *info)
     );
 }
 
-void show(status_information *info, awesomeps_configuration config)
+void show(const status_information *info, awesomeps_configuration config)
 {
     if (config & GENERAL_INFORMATION)
     {
@@ -116,49 +150,32 @@ void show(status_information *info, awesomeps_configuration config)
     }
 }
 
-void printStartTime(status_information *information)
+static void printConfiguredTableHeader(awesomeps_configuration configuration)
 {
-    printf("%-15s %llu\n", "starttime", information->starttime);
+    if (configuration & GENERAL_INFORMATION)
+    {
+        printTableHeader(generalColumnNames);
+    }
+    else if (configuration & PAGING_INFORMATION)
+    {
+        printTableHeader(pagingColumnNames);
+    }
+    else if (configuration & TIME_INFORMATION)
+    {
+        printTableHeader(timeColumnNames);
+    }
+    else
+    {
+        printf("Display error: unkown configuration\n");
+        exit(-1);
+    }
 }
 
-/**
- * Prints all the fields of the given status information. If the structure
- * pointer is NULL then nothing happens and nothing is shown.
- * 
- * This function is meant to be used for test and demonstration purposes.
- */
-void printFullStatusInformation(status_information *information)
+void showAll(const status_information informations[], unsigned count, awesomeps_configuration configuration)
 {
-    if (information != NULL)
+    printConfiguredTableHeader(configuration);
+    for (unsigned i = 0; i < count; i++)
     {
-        printf("%-15s %d\n", "pid", information->pid);
-        printf("%-15s %s\n", "comm", information->comm);
-        printf("%-15s %c\n", "state", information->state);
-        printf("%-15s %d\n", "ppid", information->ppid);
-        printf("%-15s %d\n", "pgrp", information->pgrp);
-        printf("%-15s %d\n", "session", information->session);
-        printf("%-15s %d (minor)\n", "tty_nr", MINOR_DEVICE(information->tty_nr));
-        printf("%-15s %d\n", "tpgid", information->tpgid);
-        printf("%-15s %u\n", "flags", information->flags);
-        printf("%-15s %lu\n", "minflt", information->minflt);
-        printf("%-15s %lu\n", "cminflt", information->cminflt);
-        printf("%-15s %lu\n", "majflt", information->majflt);
-        printf("%-15s %lu\n", "cmajflt", information->cmajflt);
-
-        // printf("%-15s %.2f seconds\n", "utime", clockTicksToSeconds(information->utime));
-        // printf("%-15s %.2f seconds\n", "stime", clockTicksToSeconds(information->stime));
-        // printf("%-15s %.2f seconds\n", "cutime", clockTicksToSeconds(information->cutime));
-        // printf("%-15s %.2f seconds\n", "cstime", clockTicksToSeconds(information->cstime));
-
-        printf("%-15s %ld\n", "priority", information->priority);
-        printf("%-15s %ld\n", "nice", information->nice);
-        printf("%-15s %ld\n", "num_threads", information->num_threads);
-        printf("%-15s %ld\n", "itrealvalue", information->itrealvalue);
-
-        printStartTime(information);
-
-        printf("%-15s %lu\n", "vsize", information->vsize);
-        printf("%-15s %ld\n", "rss", information->rss);
-        printf("%-15s %lu\n", "rsslim", information->rsslim);
+        show(&informations[i], configuration);
     }
 }
