@@ -1,39 +1,46 @@
-%\documentclass[french, a4, 12pt, titlepage]{article}
-\documentclass[french, a4, 10pt]{article} % si la table des matiï¿œes est petite
+\documentclass[french, a4, 12pt]{article}
 \usepackage[utf8]{inputenc}
-%\usepackage[latin1]{inputenc}
 \usepackage[francais]{babel}
+
 % Modification des marges ------------------------------
 \oddsidemargin -4mm 	% Marge de gauche -4mm
 \textwidth 17cm 	% Largeur de gauche = 17cm
 \textheight 22cm 	% Hauteur du texte = 22cm
 \parindent 0cm		% Pas d'indentation de paragraphe
-% -----------------------------------------------------
+
+% Packages --------------------------------------------
 \usepackage[T1]{fontenc}
-%\usepackage{graphicx,color, caption2}
+\usepackage{graphicx,color}
 \usepackage{epsfig}
 \usepackage{fancyhdr}
-%\usepackage{fancyvrb}
 \usepackage{textcomp}
-\pagestyle{fancy}
-%\usepackage{listings}		% pour incorporer des sources
+\usepackage{listings}		% pour incorporer des sources
 \usepackage[francais]{layout}	% pour obtenir le layout
 \usepackage{fullpage}		% pour obtenir le layout
 \usepackage{makeidx}		% pour créer une table d'index
-%\usepackage{shadow}		% pour faire des encadrements
+
+\setlength{\headheight}{15pt}
+\setlength{\headsep}{0.2in}
+\setlength{\parskip}{\baselineskip}
+\setlength{\parindent}{0pt}
+\pagestyle{fancy}
+
 \begin{document}
+
 % Titres sur  chaque page -----------------------------
-\lhead{ } % Haut gauche
+\lhead{AwesomePs - Rapport de laboratoire} % Haut gauche
 %\chead{Haut centre}
-\rhead{Rapport de laboratoire}
-\lfoot{\copyright{Alexandre Baudot et Logan Farci}}
+% \rhead{}
+\lfoot{Cours de SYSG5 (2019 - 2020)}
 \cfoot{ } % Bas centre - obligatoire !
 \rfoot{\thepage} % Bas droite
 \renewcommand{\headrulewidth}{0.4pt} 
 \renewcommand{\footrulewidth}{0.4pt} 
+
 % Numérotation et table des matières -----------------
-\setcounter{tocdepth}{1}    % fixe la profondeur de la table des matières
+\setcounter{tocdepth}{5}    % fixe la profondeur de la table des matières
 \setcounter{secnumdepth}{5} % fixe la profondeur de la numérotation des sections et paragraph
+
 % Page de garde --------------------------------------
 \title{\emph{\textbf{Rapport de laboratoire}}\\Utiliser le système de fichier /proc}
 \author{Alexandre Baudot et Logan Farci}
@@ -45,7 +52,8 @@
 
 % Inclusion des textes
 \newpage
-\input{./report/introduction}
-
-\printindex			% Impression de la table des index
+\input{./report/sections/introduction}
+\input{./report/sections/process_selection_module}
+\input{./report/sections/proc_reader_module}
+\input{./report/sections/user_interaction_module}
 \end{document}

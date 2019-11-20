@@ -23,7 +23,8 @@ OBJECTS_DIRECTORY = $(TARGET_DIRECTORY)/objects
 # 	@evince $(TARGET_DIRECTORY)/$(REPORT_FILE_NAME).pdf
 # 	@echo "$(REPORT_FILE_NAME).pdf generated successfully in $(TARGET_DIRECTORY)"
 
-report: $(REPORT_MAIN_SOURCE)
+report: $(REPORT_MAIN_SOURCE) ./report/sections/*.tex
+	@pdflatex -output-directory=$(TARGET_DIRECTORY) -jobname=$(REPORT_FILE_NAME) $<
 	@pdflatex -output-directory=$(TARGET_DIRECTORY) -jobname=$(REPORT_FILE_NAME) $<
 	@rm $(TARGET_DIRECTORY)/*.aux $(TARGET_DIRECTORY)/*.log $(TARGET_DIRECTORY)/*.toc 
 

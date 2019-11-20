@@ -1,0 +1,40 @@
+\section{Module d'interaction avec l’utilisateur}
+Dans cette section, nous exposons les différents mécanismes utilisé pour faciliter et gérer l’interaction avec l’utilisateur. Cela englobe l’affichage des données sur la sortie standard et la gestion des paramètres entrés par l’utilisateur à l’exécution du programme.
+
+\subsection{Guide}
+Le guide est un script bash qui a pour but de faciliter l'utilisation notre projet et de ses resources. Il permet à l'utilisateur de compiler le projet, de visualiser le rapport et de lancer une démonstration.
+
+\subsection{Gestion des paramètres de programme}
+AwesomePs permet à l'utilisateur de spécifier une série d'options à l'exécution du programme. Ils lui permettent d'indiquer des critères de sélection ou de choisir un  (pour rappel un sujet regroupe des données relatives à un processus).
+
+Nous interprétons les paramètres comme un ensemble de clés et de valeurs. La clé correspond au type de l'option. Actuellement, trois catégories d'options sont disponibles.
+
+\begin{itemize}
+\item "user" pour filtrer la liste des processus sur base de l'utilisateur.
+\item "status" pour filtrer la liste des processes sur base de leur statut. Cette option accepte les valeurs suivantes :
+    \begin{itemize}
+        \item "running" : pour sélectionner les processus en cours d'exécution.
+        \item "sleeping" : pour sélectionner les processus en attente de resources (interruptible).
+        \item "waiting" : pour sélectionner les processus en attente.
+        \item "zombie" : pour sélectionner les processus zombie.
+    \end{itemize}
+\item "topic" pour sélectionner les données à afficher pour un processus dans la liste sélectionnée.
+    \begin{itemize}
+        \item "general" : pour afficher les données générales relatives à un processus.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Exemples d'utilisation}
+
+\subsection{Affichage des données}
+Nous avons pris la décision d'organiser les données relatives aux processus sur base de sujets. Les sujets représentent un moyen simplifié de sélectionner les données d'un processus. Pour chaque sujet que nous avons implémenté, nous avons sélectionné une série de données que nous avons jugées pertinentes.
+
+Pour spécifier un sujet, l'utilisateur doit simplement donner une valeur pour la catégorie d'option "topic". Par exemple, une exécution de AwesomePs qui affiche les données générales serait...
+
+\begin{lstlisting}[frame=single, language=bash]
+$ > ./awesomeps topic=general
+\end{lstlisting}
+
+Le sujet par défaut est appelé "general". Il s'agit d'un sujet qui a pour but de sélectionner les informations basiques d'un processus. Le pid, le nom de la commande, l'état et le terminal courant du processus sont affichés.
+
+% Décrire les autres sujets

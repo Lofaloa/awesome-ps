@@ -1,0 +1,99 @@
+\section{Module de lecture des données}
+Dans cette section, nous commençons par décrire brièvement le système de fichiers monté sur /proc. Ensuite, nous exposons les différentes étapes de la lecture. Nous expliquons également comment nous utilisons ces données et comment nous les interprétons.
+
+\subsection{Lecture du fichier /proc/[pid]/stat}
+\subsubsection{Ce que nous apprend la documentation}
+Le fichier contient les informations qui concernent l’état d'un processus. Si l'on consulte son contenu, on y trouve une suite de données peu lisible.
+Pour les comprendre et les utiliser, les pages de manuel (man 5 proc) nous explique que les données y sont rangées dans l'ordre séparées par un espace. Pour en extraire ses données, la documentation nous recommande d'utiliser la fonction scanf(3) de la librairie standard. La documentation spécifie un format pour chaque donnée. Par exemple, state est un caractère (\%c).
+
+\subsubsection{Implémentation de la lecture}
+Nous commençons par écrire une structure de données capable de faire le lien entre le fichier et notre programme. Notre objectif est de récupérer et d’utiliser les valeurs qui y sont contenues.
+Nous avons d’abord besoin de savoir par quel type de donnée sont représentées les valeurs. Pour le savoir, nous nous basons sur les formats spécifiés par la documentation. C’est très simple. Voici quelques exemples,
+
+\begin{itemize}
+\item Le champ "comm (\%s)" est représenté dans un buffer de 256 caractères dans la structure (status\_information.comm).
+\item Le champ "state (\%c)" est représenté par un caractère (status\_information.state).
+\item Le champ "minflt (\%lu)" est représenté par un long entier non signé (long unsigned).
+\end{itemize}
+
+\pagebreak
+Voici la définition complète de la structure. Vous pouvez retrouver ce code dans le fichier sources/status\_information.h.
+
+\begin{lstlisting}[frame=single, language=c]
+typedef struct status_information
+{
+    int pid;
+    char comm[256];
+    char state;
+    int ppid;
+    int pgrp;
+    int session;
+    int tty_nr;
+    int tpgid;
+    unsigned flags;
+    long unsigned minflt;
+    long unsigned cminflt;
+    long unsigned majflt;
+    long unsigned cmajflt;
+    long unsigned utime;
+    long unsigned stime;
+    long int cutime;
+    long int cstime;
+    long int priority;
+    long int nice;
+    long int num_threads;
+    long int itrealvalue;
+    long long unsigned starttime;
+    long unsigned vsize;
+    long int rss;
+    long unsigned rsslim;
+} status_information;
+\end{lstlisting}
+
+La documentation nous indique que l’on peut utiliser la fonction standard scanf(3) pour scanner le fichier. Le principe est donc simple. Nous utilisons cette fonction pour scanner le contenu du fichier et nous utilisons notre structure pour recevoir les valeurs scannées. 
+
+Nous écrivons une fonction qui se chargera de faire cela pour nous. On veut pouvoir lui fournir le pid d’un processus et obtenir les informations relatives à son état dans la structure que l'on a défini. 
+
+Voici le code final de la fonction. 
+\begin{lstlisting}[frame=single, language=c]
+int scanStatusInformation(int pid, status_information *information)
+{
+    if (information != NULL)
+    {
+        char path[BUFFER_SIZE];
+        sprintf(path, "%s/%d/stat", PROCFS_ROOT, pid);
+        FILE *fp = fopen(path, "r");
+        if (fp != NULL)
+        {
+            fscanf(fp, STATUS_INFORMATION_FORMAT,
+                   &(information->pid),
+                   information->comm,
+                   &(information->state),
+                   // ... scan des autres valeurs ...
+                   &(information->rss),
+                   &(information->rsslim)
+            );
+            fclose(fp);
+            return 0;
+        }
+    }
+    return -1;
+}
+\end{lstlisting}
+
+Notre premier objectif dans l'implémentation de la fonction est d'ouvrir le fichier stat associé au pid passé en paramètre. Pour l'ouvrir, nous utilisons la fonction standard fopen (3). Elle ouvre le fichier dont le chemin est spécifié en paramètre et y associe un flux de données. Nous avons donc besoin d'une chaîne de caractères qui représente son chemin.
+
+Nous la construisons en utilisant la fonction sprintf. Elle a un comportement similaire à la fonction printf. Ici, la différence est que la chaîne n'est pas écrite sur la sortie standard mais dans un buffer dont l'adresse est passée en paramètre. Notre buffer se nomme path. Le chemin est disponible et il est, maintenant, possible d'appeler fopen pour ourvir notre fichier.
+
+Après avoir ouvert le fichier, nous voulons lire son contenu sur base d'un format. Comme expliqué précédemment, les pages de manuels nous conseil d'utiliser une des fonctions de la famille scanf (3). Pour lire depuis le flux de données associé au fichier récemment ouvert, nous utilisons la fonction fscanf. Sa documentation nous apprend que la fonction lit le flux de données spécifié sur base du format fournit en paramètre. Nous connaissons les formats qui correspondent aux valeurs à lire grâce à la documentation (man proc).
+
+La fonction fscanf, sur base du format spécifié, interprète les données du flux de données et les écrits dans les variables fournies. Nous lui faisons passer, dans l'ordre spécifié par la documentation, les différents champs de la structure que l'on a défini.
+
+\subsection{Lecture des données utilisateur}
+Pour trouver l’utilisateur du process ainsi que son nom, nous créons 2 fonctions dans le fichier "user\_information.c" : 
+
+\begin{itemize}
+\item findProcessUserId(int pid) : Se charge de trouver l’id linux de l’utilisateur dont l’id du process a été passé en paramètres. Cette fonction va se charger de lire le fichier “/proc/[pid]/status” et d’en extraire l’user id.
+
+\item findUserName(int userId) : Elle va se charger de convertir un id d’utilisateur en nom en chaîne de caractères correspondant au nom de l’utilisateur. Cette fonction va donc dans le fichier /etc/passwd lire l’entrée utilisateur correspondant à l’id donné en paramètre.
+\end{itemize}
