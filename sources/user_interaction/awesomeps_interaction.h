@@ -7,6 +7,7 @@
 // Defines the key available to the user
 #define USER_KEY "user"
 #define STATE_KEY "state"
+#define PID_KEY "pid"
 #define TOPIC_KEY "topic"
 
 // Defines the values available for the keys

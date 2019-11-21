@@ -21,7 +21,7 @@
  * 
  * If the directory name contains letters, -1 is returned.
  */
-static long parseProcessDirectoryName(char *dirname)
+long parseProcessIdentifier(char *dirname)
 {
     char *endptr;
     long pid = strtol(dirname, &endptr, 10);
@@ -48,7 +48,7 @@ void searchProcesses(int *pids, const awesomeps_option *options, unsigned count)
         {
             while ((entry = readdir(proc)) != NULL)
             {
-                long pid = parseProcessDirectoryName(entry->d_name);
+                long pid = parseProcessIdentifier(entry->d_name);
                 if (pid >= 0 && matchesOptions(pid, options, count))
                 {
                     pids[current] = pid;

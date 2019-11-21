@@ -9,6 +9,16 @@
 #include "../procfs_reader/stat_file_scanner.h"
 #include "../user_interaction/awesomeps_configuration.h"
 #include "../user_interaction/awesomeps_interaction.h"
+#include "processes_search.h"
+
+static char stateValueToCharacter(char * state)
+{
+    if (strcmp(RUNNING_STATE_VALUE, state) == 0) return 'R';
+    if (strcmp(SLEEPING_STATE_VALUE, state) == 0) return 'S';
+    if (strcmp(WAITING_STATE_VALUE, state) == 0) return 'D';
+    if (strcmp(ZOMBIE_STATE_VALUE, state) == 0) return 'Z';
+    return 0;
+}
 
 static bool matchesCurrentUserAndTTY(int pid)
 {
@@ -64,13 +74,10 @@ static bool matchesUserName(int pid, const char* userName)
     return correspondingUser;
 }
 
-static char stateValueToCharacter(char * state)
+static bool matchesProcessIdentifier(int pid, char* pidString)
 {
-    if (strcmp(RUNNING_STATE_VALUE, state) == 0) return 'R';
-    if (strcmp(SLEEPING_STATE_VALUE, state) == 0) return 'S';
-    if (strcmp(WAITING_STATE_VALUE, state) == 0) return 'D';
-    if (strcmp(ZOMBIE_STATE_VALUE, state) == 0) return 'Z';
-    return 0;
+    int pidValue = parseProcessIdentifier(pidString);
+    return pidValue >= 0 && pid == pidValue;
 }
 
 static bool matchesState(int pid, char* state)
@@ -88,10 +95,12 @@ static bool matchesState(int pid, char* state)
 
 static bool matchesOption(int pid, const awesomeps_option *option) {
     bool matches = false;
-    // if (strcmp(USER_KEY, option->key))
-    // {
-    //     matches = matchesUserName(pid, option->value);
-    // }
+    if (strcmp(PID_KEY, option->key) == 0)
+    {
+        printf("\t by the pid: ");
+        matches = matchesProcessIdentifier(pid, option->value);
+        printf(" matches => %d\n", matches);
+    }
     if (strcmp(STATE_KEY, option->key) == 0)
     {
         printf("\t by the state: ");
