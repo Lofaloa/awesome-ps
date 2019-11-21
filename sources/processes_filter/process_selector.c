@@ -9,10 +9,10 @@
 #include <pwd.h>
 #include <ctype.h>
 
-#include "procfs_reader/user_information.h"
-#include "procfs_reader/status_information_scanner.h"
+#include "../procfs_reader/user_information.h"
+#include "../procfs_reader/status_information_scanner.h"
 #include "process_selector.h"
-#include "interaction/awesomeps_interaction.h"
+#include "../user_interaction/awesomeps_interaction.h"
 
 #define PROC_ROOT "/proc"
 

@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "interaction/awesomeps_interaction.h"
+#include "user_interaction/awesomeps_interaction.h"
 
 int main(int argc, char **argv)
 {

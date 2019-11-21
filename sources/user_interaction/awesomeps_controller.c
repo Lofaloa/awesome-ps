@@ -2,7 +2,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../process_selector.h"
+#include "../processes_filter/process_selector.h"
 #include "../procfs_reader/status_information_scanner.h"
 #include "../procfs_reader/status_information.h"
 

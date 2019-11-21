@@ -11,7 +11,7 @@ REPORT_MAIN_SOURCE = ./report/main.tex
 
 ################################ PROJECT FILES ################################
 SOURCE_FILES = $(SRC_DIRECTORY)/*.c $(SRC_DIRECTORY)/*/*.c
-HEADER_FILES = $(SRC_DIRECTORY)/*.h $(SRC_DIRECTORY)/*/*.h
+HEADER_FILES = $(SRC_DIRECTORY)/*/*.h
 FILES = $(SOURCE_FILES) $(HEADER_FILES)
 TARGET = $(TARGET_DIRECTORY)/$(TARGET_NAME)
 OBJECTS_DIRECTORY = $(TARGET_DIRECTORY)/objects
