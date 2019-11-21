@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "awesomeps_controller.h"
+#include "interaction/awesomeps_interaction.h"
 
 int main(int argc, char **argv)
 {

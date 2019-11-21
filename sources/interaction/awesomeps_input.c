@@ -2,18 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "interaction.h"
+#include "awesomeps_interaction.h"
 
 #define OPTION_SEPARATOR "="
-
-/**
- * comportement par défaut, afficher les process de l'user et tty courant (format général)
- * 
- * user = nom utilisateur
- * status = *
- * 
- * format = *
- */
 
 static const char *keys[] = {"user", "status", "topic"};
 static const char *statusValues[] = {"running", "sleeping", "waiting", "zombie"};

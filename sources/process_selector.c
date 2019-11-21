@@ -12,7 +12,7 @@
 #include "user_information.h"
 #include "status_information_scanner.h"
 #include "process_selector.h"
-#include "awesomepsio.h"
+#include "interaction/awesomeps_interaction.h"
 
 #define PROC_ROOT "/proc"
 

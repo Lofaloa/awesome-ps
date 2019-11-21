@@ -2,13 +2,12 @@
 #include <string.h>
 #include <time.h>
 
-#include "process_selector.h"
-#include "status_information_scanner.h"
-#include "awesomepsio.h"
+#include "../process_selector.h"
+#include "../status_information_scanner.h"
+#include "../status_information.h"
 
-#include "status_information.h"
 #include "awesomeps_configuration.h"
-#include "interaction.h"
+#include "awesomeps_interaction.h"
 
 /**
  * Converts a given option to its related configuration flag.
