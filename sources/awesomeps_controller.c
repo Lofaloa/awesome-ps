@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "process_selector.h"
 #include "status_information_scanner.h"
@@ -74,6 +75,7 @@ void runWithOptions(unsigned argc, char **argv)
        dont je suis le propriétaire et qui en exécution
     */
     searchProcesses(pids, 0, 0);
+
     while (pids[current] >= 0)
     {
         status_information information;
@@ -82,4 +84,5 @@ void runWithOptions(unsigned argc, char **argv)
         current++;
     }
     showAll(informations, current, configuration);
+    showFeedback();
 }

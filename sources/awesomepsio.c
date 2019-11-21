@@ -6,6 +6,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "status_information.h"
 #include "awesomeps_configuration.h"
@@ -133,6 +134,22 @@ static void sprintConfiguredTableHeader(awesomeps_configuration config,
     }
 }
 
+static void sprintCurrentTime(char *buffer)
+{
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(
+        buffer,
+        "%d-%d-%d %d:%d:%d\n",
+        tm.tm_year + 1900,
+        tm.tm_mon + 1,
+        tm.tm_mday,
+        tm.tm_hour,
+        tm.tm_min,
+        tm.tm_sec
+    );
+}
+
 /* Prints general information about the process identified by the given pid.
  *
  * General information contain :
@@ -177,6 +194,13 @@ static void printPagingInformation(const status_information *info)
         info->comm,
         info->minflt,
         info->majflt);
+}
+
+void showFeedback(awesomeps_configuration config)
+{
+    char currentTimeBuffer[BUFFER_SIZE];
+    sprintCurrentTime(currentTimeBuffer);
+    printf("\vCurrent time: %s\n", currentTimeBuffer);
 }
 
 void show(const status_information *info, awesomeps_configuration config)
