@@ -3,8 +3,8 @@
 #include <time.h>
 
 #include "../processes_filter/process_selector.h"
-#include "../procfs_reader/status_information_scanner.h"
-#include "../procfs_reader/status_information.h"
+#include "../procfs_reader/stat_file_scanner.h"
+#include "../procfs_reader/process.h"
 #include "../procfs_reader/procfs_reader.h"
 
 #include "awesomeps_configuration.h"
@@ -58,28 +58,17 @@ awesomeps_configuration getConfiguration(const awesomeps_option *options, unsign
 void runWithOptions(unsigned argc, char **argv)
 {
     int pids[1000];
-    status_information informations[1000];
+    process informations[1000];
     unsigned current = 0;
     awesomeps_option options[100];
     awesomeps_configuration configuration = EMPTY;
-
     parseCommandlineArguments(argc, argv, options);
     configuration = getConfiguration(options, argc - 1);
-
-    /* TODO: ici on peut imaginer que la fonction prenne en paramètre une
-       configuration.
-       Par exemple: void searchProcesses(int *, awesomeps_configuration, char *)
-
-       Le but est de pouvoir combiner les filtres. Donc en gros il faut que si
-       je donne user=logan et status=running, je ne dois avoir que les process
-       dont je suis le propriétaire et qui en exécution
-    */
     searchProcesses(pids, 0, 0);
-
     while (pids[current] >= 0)
     {
-        status_information information;
-        readProcessInformationFor(pids[current], &information);
+        process information;
+        readProcessInformation(pids[current], &information);
         informations[current] = information;
         current++;
     }

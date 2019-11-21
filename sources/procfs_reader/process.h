@@ -1,5 +1,5 @@
-#ifndef STATUS_INFORMATION_H
-#define STATUS_INFORMATION_H
+#ifndef process_H
+#define process_H
 
 
 // Minor device in contained in the conbination of bits 31 and 20 and 7 to 0
@@ -10,7 +10,7 @@
  * All the fields match the data specified in the /proc/[pid]/stat section of
  * the manual page (man 5 proc).
  */
-typedef struct status_information
+typedef struct process
 {
     int pid;
     char comm[256];
@@ -42,6 +42,6 @@ typedef struct status_information
     /* And a lot of others, some of them are marked by [PT], we should look
      * into that.
      */
-} status_information;
+} process;
 
-#endif /* STATUS_INFORMATION_H */
+#endif /* process_H */

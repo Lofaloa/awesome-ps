@@ -20,7 +20,7 @@ Nous avons d’abord besoin de savoir par quel type de donnée sont représenté
 Voici la définition complète de la structure. Vous pouvez retrouver ce code dans le fichier sources/status\_information.h.
 
 \begin{lstlisting}[frame=single, language=c]
-typedef struct status_information
+typedef struct process
 {
     int pid;
     char comm[256];
@@ -47,7 +47,7 @@ typedef struct status_information
     long unsigned vsize;
     long int rss;
     long unsigned rsslim;
-} status_information;
+} process;
 \end{lstlisting}
 
 La documentation nous indique que l’on peut utiliser la fonction standard scanf(3) pour scanner le fichier. Le principe est donc simple. Nous utilisons cette fonction pour scanner le contenu du fichier et nous utilisons notre structure pour recevoir les valeurs scannées. 
@@ -56,7 +56,7 @@ Nous écrivons une fonction qui se chargera de faire cela pour nous. On veut pou
 
 Voici le code final de la fonction. 
 \begin{lstlisting}[frame=single, language=c]
-int scanStatusInformation(int pid, status_information *information)
+int scanStatusInformation(int pid, process *information)
 {
     if (information != NULL)
     {
@@ -65,7 +65,7 @@ int scanStatusInformation(int pid, status_information *information)
         FILE *fp = fopen(path, "r");
         if (fp != NULL)
         {
-            fscanf(fp, STATUS_INFORMATION_FORMAT,
+            fscanf(fp, process_FORMAT,
                    &(information->pid),
                    information->comm,
                    &(information->state),

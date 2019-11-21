@@ -10,7 +10,7 @@
 #include <ctype.h>
 
 #include "../procfs_reader/user_information.h"
-#include "../procfs_reader/status_information_scanner.h"
+#include "../procfs_reader/stat_file_scanner.h"
 #include "process_selector.h"
 #include "../user_interaction/awesomeps_interaction.h"
 
@@ -97,7 +97,7 @@ void searchProcesses(int *pid_array, char searchOption, char* parameter)
 bool matchCurrentUserAndTTY(int pid)
 {
     bool correspondingUserAndTTY = FALSE ;
-    status_information information;
+    process information;
     int userId = findProcessUserId(pid);
     char * currentTTY = ttyname(0);
     int ttyNr = -1 ;
@@ -117,7 +117,7 @@ bool matchCurrentUserAndTTY(int pid)
         perror("Cannot find the process user id");
     }
     
-    if (scanStatusInformation(pid, &information) == -1)
+    if (scanStatFile(pid, &information) == -1)
     {
         perror("PID not found.");
         return correspondingUserAndTTY ;
@@ -156,8 +156,8 @@ bool matchStatus(int pid, char* status)
 {
     bool correspondingStatus = FALSE;
     char stateChar = status[0];
-    status_information information;
-    if (scanStatusInformation(pid, &information) == -1)
+    process information;
+    if (scanStatFile(pid, &information) == -1)
     {
         perror("PID not found.");
         return correspondingStatus ;

@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../procfs_reader/status_information.h"
+#include "../procfs_reader/process.h"
 #include "awesomeps_configuration.h"
 
 #define PROCFS_ROOT "/proc"
@@ -157,7 +157,7 @@ static void sprintCurrentTime(char *buffer)
  *     - the command that executed the process
  *     - the name of the owner
  */
-static void printGeneralInformation(const status_information *info)
+static void printGeneralInformation(const process *info)
 {
     char buffer[BUFFER_SIZE];
     sprintfState(info->state, buffer);
@@ -169,7 +169,7 @@ static void printGeneralInformation(const status_information *info)
         MINOR_DEVICE(info->tty_nr));
 }
 
-static void printTimeInformation(const status_information *info)
+static void printTimeInformation(const process *info)
 {
     char userTimeBuffer[BUFFER_SIZE];
     char kernelTimeBuffer[BUFFER_SIZE];
@@ -186,7 +186,7 @@ static void printTimeInformation(const status_information *info)
 /**
  * Prints information related to the paging.
  */
-static void printPagingInformation(const status_information *info)
+static void printPagingInformation(const process *info)
 {
     printf(
         "|%-30d|%-30s|%-30lu|%-30lu|\n",
@@ -203,7 +203,7 @@ void showFeedback(awesomeps_configuration config)
     printf("\vCurrent time: %s\n", currentTimeBuffer);
 }
 
-void show(const status_information *info, awesomeps_configuration config)
+void show(const process *info, awesomeps_configuration config)
 {
     if (config & GENERAL_INFORMATION)
     {
@@ -224,7 +224,7 @@ void show(const status_information *info, awesomeps_configuration config)
     }
 }
 
-void showAll(const status_information informations[], unsigned count, awesomeps_configuration configuration)
+void showAll(const process informations[], unsigned count, awesomeps_configuration configuration)
 {
     char header[BUFFER_SIZE];
     char separator[BUFFER_SIZE];

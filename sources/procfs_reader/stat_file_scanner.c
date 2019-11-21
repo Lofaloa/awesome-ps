@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "status_information.h"
+#include "process.h"
 
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
@@ -16,7 +16,7 @@
  * 
  * Note: I stopped the format at stat.rsslim (25)
  */
-static const char *STATUS_INFORMATION_FORMAT =
+static const char *process_FORMAT =
     "%d %s %c %d %d %d %d %d %u %lu %lu %lu %lu %lu %lu %ld %ld %ld %ld %ld \
     %ld %llu %lu %ld %lu";
 
@@ -26,14 +26,13 @@ static const char *STATUS_INFORMATION_FORMAT =
  * If the specified pid does not exist in the current system state then -1 is
  * returned.
  * 
- * If the status_information pointer structure is NULL then nothing happens and
+ * If the process pointer structure is NULL then nothing happens and
  * -1 is returned.
  * 
  * Note: I stopped the format at stat.rsslim (25)
  */
-int scanStatusInformation(int pid, status_information *information)
+int scanStatFile(int pid, process *information)
 {
-    printf("\tin stat scanner for pid %d\n", pid);
     if (information != NULL)
     {
         char path[BUFFER_SIZE];
@@ -41,7 +40,7 @@ int scanStatusInformation(int pid, status_information *information)
         FILE *fp = fopen(path, "r");
         if (fp != NULL)
         {
-            fscanf(fp, STATUS_INFORMATION_FORMAT,
+            fscanf(fp, process_FORMAT,
                    &(information->pid),
                    information->comm,
                    &(information->state),
@@ -68,7 +67,6 @@ int scanStatusInformation(int pid, status_information *information)
                    &(information->rss),
                    &(information->rsslim));
             fclose(fp);
-            printf("\tout stat scanner for pid %d\n", pid);
             return 0;
         }
     }

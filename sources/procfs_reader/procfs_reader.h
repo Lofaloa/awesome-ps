@@ -1,3 +1,3 @@
-#include "status_information.h"
+#include "process.h"
 
-void readProcessInformationFor(int pid, status_information *information);
+void readProcessInformation(int pid, process *information);

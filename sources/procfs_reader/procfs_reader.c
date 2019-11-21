@@ -1,12 +1,12 @@
 #include <stdio.h>
 
-#include "status_information.h"
+#include "process.h"
 #include "user_information.h"
-#include "status_information_scanner.h"
+#include "stat_file_scanner.h"
 
-void readProcessInformationFor(int pid, status_information *information)
+void readProcessInformation(int pid, process *information)
 {
-    scanStatusInformation(pid, information);
+    scanStatFile(pid, information);
     // information->uid = findProcessUserId(pid);
     // char *userName = findUserName(information->uid);
     // sprintf(information->user_name, "%s", userName);
