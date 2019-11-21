@@ -1,6 +1,6 @@
 #!/bin/bash
 
-################################## OBJECTIFS ##################################
+################################### PURPOSE ###################################
 # Ce fichier a pour but de gérer la première interaction avec l'utilisateur. On
 # pourrait imaginer:
 #   - Accepter des paramètres en ligne de commande. Exemples:
@@ -15,6 +15,7 @@
 ################################ CONFIGURATION ################################
 TARGET_DIRECTORY="./target"
 DEMO_SCRIPT="./demonstration/start.sh"
+REPORT_FILE="$TARGET_DIRECTORY/report.pdf"
 REQUIRED_OPTIONS=1
 
 ################################## CONSTANTS ##################################
@@ -30,16 +31,18 @@ function startDemonstration {
 }
 
 function showReport {
-    echo "[INFO] call to showReport but not implemented yet"
+    if [ ! -f $REPORT_FILE ]; then
+        make
+    fi
+    evince ./target/report.pdf || echo "Failed to open $REPORT_FILE!"
 }
 
 function installAwesomePS {
     if [ -d "$TARGET_DIRECTORY" ]; then
         echo "The project is already built in the ${TARGET_DIRECTORY} directory."
     else
-        echo "Building the project in ${TARGET_DIRECTORY}."
+        echo "Building the project in ${TARGET_DIRECTORY}..."
         make
-        # Should we set environment path?
     fi
 }
 
