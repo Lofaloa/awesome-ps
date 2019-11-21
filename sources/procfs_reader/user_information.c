@@ -56,18 +56,17 @@ int getUserRealIdentifier(const int pid)
 {
     char line[BUFFER_SIZE];
     char *currentLineTokens[BUFFER_SIZE];
-    unsigned count = 0;
     FILE *status = fopenStatusFileOf(pid);
     while (fgets(line, sizeof(line), status))
     {
-        count = tokenizeStatusFileLine(line, currentLineTokens);
+        tokenizeStatusFileLine(line, currentLineTokens);
         if (strcmp(currentLineTokens[0], USER_ID_KEY) == 0)
         {
             return parseStringToUnsigned(currentLineTokens[1]);
         }
     }
     fclose(status);
-    return count;
+    return -1;
 }
 
 void findUserName(int userId, char *username)

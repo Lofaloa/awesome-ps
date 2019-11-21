@@ -35,7 +35,9 @@ typedef enum configuration {
     PAGING_INFORMATION = 1 << 5,
 
     // Should be used to print informations related to the process time.
-    TIME_INFORMATION = 1 << 6
+    TIME_INFORMATION = 1 << 6,
+
+   DEFAULT_CONFIGURATION = 1 << 7
 
 } awesomeps_configuration;
 

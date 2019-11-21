@@ -20,43 +20,30 @@ static char stateValueToCharacter(char * state)
     return 0;
 }
 
-// static bool matchesCurrentUserAndTTY(int pid)
-// {
-//     bool correspondingUserAndTTY = false ;
-//     process information;
-//     int userId = findProcessUserId(pid);
-//     char * currentTTY = ttyname(0);
-//     int ttyNr = -1 ;
-    
-//     int i = 0;
-//     char *tokens[30];
-    
-//     tokens[i]=strtok(currentTTY,"/");
-//     while (tokens[i] != NULL) tokens[++i]=strtok(NULL," ");
-//     if(isdigit(tokens[1][4]) != 0)
-//     {
-//         ttyNr = tokens[1][4] - '0'; //Converting char to int
-//     }
-    
-//     if(userId == -1)
-//     {
-//         perror("Cannot find the process user id");
-//     }
-    
-//     if (scanStatFile(pid, &information) == -1)
-//     {
-//         perror("PID not found.");
-//         return correspondingUserAndTTY ;
-//     }
-//     else 
-//     {
-//         if((userId == (int)getuid()) &&  (ttyNr == MINOR_DEVICE(information.tty_nr)))
-//         {
-//             correspondingUserAndTTY = true;
-//         }
-//     }
-//     return correspondingUserAndTTY;
-// }
+static bool matchesCurrentUser(int pid)
+{
+    int userRealIdentifier = getUserRealIdentifier(pid);
+    if (userRealIdentifier >= 0)
+    {
+        return getuid() == userRealIdentifier;
+    }
+    return false;
+}
+
+static bool matchesCurrentTerminal(int pid)
+{
+    process information;
+    if (scanStatFile(pid, &information) == 0)
+    {
+        return getppid() == information.ppid || information.pid == getppid();
+    }
+    return false;
+}
+
+static bool matchesCurrentContext(int pid)
+{
+    return matchesCurrentTerminal(pid) && matchesCurrentUser(pid);
+}
 
 static bool matchesProcessIdentifier(int pid, char* pidString)
 {
@@ -66,18 +53,21 @@ static bool matchesProcessIdentifier(int pid, char* pidString)
 
 static bool matchesState(int pid, char* state)
 {
-    bool correspondingStatus = false;
     char stateChar = stateValueToCharacter(state);
     process information;
     if (scanStatFile(pid, &information) == 0)
     {
         return stateChar == information.state;
     }
-    return correspondingStatus;
+    return false;
 }
 
 static bool matchesOption(int pid, const awesomeps_option *option) {
     bool matches = true;
+    if (strcmp(DEFAULT_KEY, option->key) == 0)
+    {
+        matches &= matchesCurrentContext(pid);
+    }    
     if (strcmp(PID_KEY, option->key) == 0)
     {
         matches &= matchesProcessIdentifier(pid, option->value);

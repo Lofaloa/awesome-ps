@@ -15,25 +15,25 @@
  */
 void setConfiguration(awesomeps_configuration *config, awesomeps_option *opt)
 {
-    if (strcmp("user", opt->key) == 0)
+    if (strcmp(USER_KEY, opt->key) == 0)
     {
         *config |= PROCESS_BY_USER;
     }
-    if (strcmp("status", opt->key) == 0)
+    if (strcmp(STATE_KEY, opt->key) == 0)
     {
         *config |= PROCESS_BY_STATUS;
     }
-    if (strcmp("topic", opt->key) == 0)
+    if (strcmp(TOPIC_KEY, opt->key) == 0)
     {
-        if (strcmp("paging", opt->value) == 0)
+        if (strcmp(PAGING_TOPIC_VALUE, opt->value) == 0)
         {
             *config |= PAGING_INFORMATION;
         }
-        if (strcmp("general", opt->value) == 0)
+        if (strcmp(GENERAL_TOPIC_VALUE, opt->value) == 0)
         {
             *config |= GENERAL_INFORMATION;
         }
-        if (strcmp("time", opt->value) == 0)
+        if (strcmp(TIME_TOPIC_VALUE, opt->value) == 0)
         {
             *config |= TIME_INFORMATION;
         }

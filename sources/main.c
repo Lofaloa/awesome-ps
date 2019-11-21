@@ -15,7 +15,16 @@ int main(int argc, char **argv)
         awesomeps_option options[100];
         unsigned optionsCount = parseCommandlineArguments(argc, argv, options);
         runWithOptions(options, optionsCount);
-    } else {
+    }
+    else if (argc == 1)
+    {
+        awesomeps_option options[100];
+        options[0] = (awesomeps_option) {DEFAULT_KEY, DEFAULT_VALUE};
+        options[1] = (awesomeps_option) {TOPIC_KEY, GENERAL_TOPIC_VALUE};
+        runWithOptions(options, 2);
+    }
+    else
+    {
         showHelp();
     }
     return 0;
