@@ -6,9 +6,18 @@
 
 #define OPTION_SEPARATOR "="
 
-static const char *keys[] = {"user", "status", "topic"};
-static const char *statusValues[] = {"running", "sleeping", "waiting", "zombie"};
-static const char *topicValues[] = {"paging", "general", "time"};
+static const char *keys[] = {USER_KEY, STATE_KEY, TOPIC_KEY};
+static const char *statusValues[] = {
+    RUNNING_STATE_VALUE,
+    SLEEPING_STATE_VALUE,
+    WAITING_STATE_VALUE,
+    ZOMBIE_STATE_VALUE
+};
+static const char *topicValues[] = {
+    PAGING_TOPIC_VALUE,
+    GENERAL_TOPIC_VALUE,
+    TIME_TOPIC_VALUE
+};
 
 static int array_contains(const char **array, unsigned count, char *value)
 {
@@ -53,11 +62,11 @@ static int isValidValueForKey(char *key, char *value)
 {
     if (isValidKey(key))
     {
-        if (strcmp("status", key) == 0)
+        if (strcmp(STATE_KEY, key) == 0)
         {
             return value != NULL && array_contains(statusValues, 4, value);
         }
-        else if (strcmp("topic", key) == 0)
+        else if (strcmp(TOPIC_KEY, key) == 0)
         {
             return value != NULL && array_contains(topicValues, 3, value);
         }
