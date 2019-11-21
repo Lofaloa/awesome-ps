@@ -87,25 +87,20 @@ static bool matchesState(int pid, char* state)
     process information;
     if (scanStatFile(pid, &information) == 0)
     {
-        printf(" %c == %c ", stateChar, information.state);
         return stateChar == information.state;
     }
     return correspondingStatus;
 }
 
 static bool matchesOption(int pid, const awesomeps_option *option) {
-    bool matches = false;
+    bool matches = true;
     if (strcmp(PID_KEY, option->key) == 0)
     {
-        printf("\t by the pid: ");
-        matches = matchesProcessIdentifier(pid, option->value);
-        printf(" matches => %d\n", matches);
+        matches &= matchesProcessIdentifier(pid, option->value);
     }
     if (strcmp(STATE_KEY, option->key) == 0)
     {
-        printf("\t by the state: ");
-        matches = matchesState(pid, option->value);
-        printf(" matches => %d\n", matches);
+        matches &= matchesState(pid, option->value);
     }
     return matches;
 }
@@ -113,7 +108,6 @@ static bool matchesOption(int pid, const awesomeps_option *option) {
 bool matchesOptions(int pid, const awesomeps_option *options, unsigned count)
 {
     unsigned current = 0;
-    printf("filtering pid %d:\n", pid);
     while (current < count && matchesOption(pid, &options[current]))
     {
         current++;

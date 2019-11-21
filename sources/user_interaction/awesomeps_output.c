@@ -119,18 +119,13 @@ static void sprintConfiguredTableHeader(awesomeps_configuration config,
     {
         sprintTableHeader(generalColumnNames, separator, header);
     }
-    else if (config & PAGING_INFORMATION)
+    if (config & PAGING_INFORMATION)
     {
         sprintTableHeader(pagingColumnNames, separator, header);
     }
-    else if (config & TIME_INFORMATION)
+    if (config & TIME_INFORMATION)
     {
         sprintTableHeader(timeColumnNames, separator, header);
-    }
-    else
-    {
-        printf("Display error: unkown configuration\n");
-        exit(-1);
     }
 }
 

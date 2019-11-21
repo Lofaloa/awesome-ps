@@ -67,13 +67,13 @@ void runWithOptions(unsigned argc, char **argv)
     configuration = getConfiguration(options, optionsCount);
     
     searchProcesses(pids, options, optionsCount);
-    // while (pids[current] >= 0)
-    // {
-    //     process information;
-    //     readProcessInformation(pids[current], &information);
-    //     informations[current] = information;
-    //     current++;
-    // }
-    // showAll(informations, current, configuration);
-    // showFeedback();
+    while (pids[current] >= 0)
+    {
+        process information;
+        readProcessInformation(pids[current], &information);
+        informations[current] = information;
+        current++;
+    }
+    showAll(informations, current, configuration);
+    showFeedback();
 }
