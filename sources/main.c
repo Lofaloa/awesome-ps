@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "user_interaction/awesomeps_interaction.h"
+#include "procfs_reader/user_information.h"
 
 int main(int argc, char **argv)
 {

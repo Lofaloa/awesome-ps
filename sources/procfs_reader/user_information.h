@@ -6,13 +6,11 @@
  * 
  * returns : -1 if fail, userId if sucessful
  */
-int findProcessUserId(int pid);
-
+int getUserRealIdentifier(const int pid);
 
 /**
  * Find a user name with an user id.
  * 
  * returns : -1 if fail, userId if sucessful
  */
-char* findUserName(int userId);
-
+void findUserName(int userId, char *buffer);

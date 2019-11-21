@@ -214,7 +214,7 @@ void show(const process *info, awesomeps_configuration config)
     }
     else
     {
-        printf("Display error: unkown configuration\n");
+        printf("Display error: please select a topic.\n");
         exit(-1);
     }
 }
