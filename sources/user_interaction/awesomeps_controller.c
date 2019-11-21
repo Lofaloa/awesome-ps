@@ -2,7 +2,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../processes_filter/process_selector.h"
+#include "../processes_filter/processes_search.h"
 #include "../procfs_reader/stat_file_scanner.h"
 #include "../procfs_reader/process.h"
 #include "../procfs_reader/procfs_reader.h"
@@ -64,7 +64,7 @@ void runWithOptions(unsigned argc, char **argv)
     awesomeps_configuration configuration = EMPTY;
     parseCommandlineArguments(argc, argv, options);
     configuration = getConfiguration(options, argc - 1);
-    searchProcesses(pids, 0, 0);
+    searchProcesses(pids, configuration);
     while (pids[current] >= 0)
     {
         process information;
