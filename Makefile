@@ -17,13 +17,6 @@ TARGET = $(TARGET_DIRECTORY)/$(TARGET_NAME)
 OBJECTS_DIRECTORY = $(TARGET_DIRECTORY)/objects
 
 ################################### TARGETS ###################################
-
-# This target should open the generated pdf document, it crashes on Ubuntu
-# report: report.pdf
-# 	@evince $(TARGET_DIRECTORY)/$(REPORT_FILE_NAME).pdf
-# 	@echo "$(REPORT_FILE_NAME).pdf generated successfully in $(TARGET_DIRECTORY)"
-
-#
 .PHONY: clean report
 
 target: awesomeps report
