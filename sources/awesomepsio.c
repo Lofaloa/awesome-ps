@@ -13,7 +13,8 @@
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
 
-typedef struct time {
+typedef struct time
+{
     unsigned hours;
     unsigned minutes;
     unsigned seconds;
@@ -23,13 +24,21 @@ const char *generalColumnNames[] = {"PID", "COMMANDE", "STATE", "TERMINAL", NULL
 const char *timeColumnNames[] = {"PID", "COMMANDE", "USER TIME", "KERNEL TIME", NULL};
 const char *pagingColumnNames[] = {"PID", "COMMANDE", "MINOR FAULTS", "MAJOR FAULTS", NULL};
 
-
+/**
+ * Converts a number of clock ticks to a number of seconds.
+ */
 static double clockTicksToSeconds(long unsigned clockTicks)
 {
-    double result =  (double) clockTicks / (double) sysconf(_SC_CLK_TCK);
+    double result = (double)clockTicks / (double)sysconf(_SC_CLK_TCK);
     return result;
 }
 
+/**
+ * Extracts hours, minutes and seconds from a specified number of seconds. The
+ * result is written to the given structure.
+ * 
+ * if time is NULL, nothing is done.
+ */
 static void secondsToHMS(long unsigned seconds, hms_time *time)
 {
     if (time != NULL)
@@ -50,61 +59,79 @@ static void sprintfTime(long unsigned clockTicks, char *buffer)
         "%02u:%02u:%02u",
         time.hours,
         time.minutes,
-        time.seconds
-    );
+        time.seconds);
 }
 
 static void sprintfState(char state, char *buffer)
 {
-    switch(state)
+    switch (state)
     {
-        case 'R':
-            sprintf(buffer, "Running");
-            break;
-        case 'S':
-            sprintf(buffer, "Sleeping");
-            break;
-        case 'D':
-            sprintf(buffer, "Waiting");
-            break;
-        case 'Z':
-            sprintf(buffer, "Zombie");
-            break;
-        case 'T':
-            sprintf(buffer, "Stopped");
-            break;
-        default:
-            sprintf(buffer, "Undefined");
+    case 'R':
+        sprintf(buffer, "Running");
+        break;
+    case 'S':
+        sprintf(buffer, "Sleeping");
+        break;
+    case 'D':
+        sprintf(buffer, "Waiting");
+        break;
+    case 'Z':
+        sprintf(buffer, "Zombie");
+        break;
+    case 'T':
+        sprintf(buffer, "Stopped");
+        break;
+    default:
+        sprintf(buffer, "Undefined");
     }
 }
 
 /**
- * Prints the header of a table. The argument is a null terminated array
- * of strings.
+ * Builds a header and a separator based on an array of titles. The array
+ * should be null terminated.
+ * 
+ * The separator is used as an interline in a table. The header is a string
+ * that contains the different titles separated by '|' (column separator).
  */
-static void printTableHeader(const char **columnNames)
+static void sprintTableHeader(const char **titles, char *separator, char *header)
 {
     unsigned current = 0;
-    char buffer[256];
-    char separator[256];
-    buffer[0] = '|';
+    header[0] = '|';
+    header[1] = 0;
     separator[0] = '+';
-    separator[1] = 0; // just a work around, without it random char are printed
-    while (columnNames[current] != NULL)
+    separator[1] = 0;
+    while (titles[current] != NULL)
     {
         sprintf(
             separator + strlen(separator),
-            "%-30s+", 
-            "------------------------------"
-        );
-        sprintf(buffer + strlen(buffer), "%-30s|", columnNames[current]);
+            "%-30s+",
+            "------------------------------");
+        sprintf(header + strlen(header), "%-30s|", titles[current]);
         current++;
     }
-    printf("%s\n", separator);
-    printf("%s\n", buffer);
-    printf("%s\n", separator);
 }
 
+static void sprintConfiguredTableHeader(awesomeps_configuration config,
+                                        char *separator, char *header)
+{
+    if (config & GENERAL_INFORMATION)
+    {
+        sprintTableHeader(generalColumnNames, separator, header);
+    }
+    else if (config & PAGING_INFORMATION)
+    {
+        sprintTableHeader(pagingColumnNames, separator, header);
+    }
+    else if (config & TIME_INFORMATION)
+    {
+        sprintTableHeader(timeColumnNames, separator, header);
+    }
+    else
+    {
+        printf("Display error: unkown configuration\n");
+        exit(-1);
+    }
+}
 
 /* Prints general information about the process identified by the given pid.
  *
@@ -122,8 +149,7 @@ static void printGeneralInformation(const status_information *info)
         info->pid,
         info->comm,
         buffer,
-        MINOR_DEVICE(info->tty_nr)
-    );
+        MINOR_DEVICE(info->tty_nr));
 }
 
 static void printTimeInformation(const status_information *info)
@@ -137,8 +163,7 @@ static void printTimeInformation(const status_information *info)
         info->pid,
         info->comm,
         userTimeBuffer,
-        kernelTimeBuffer
-    );
+        kernelTimeBuffer);
 }
 
 /**
@@ -151,8 +176,7 @@ static void printPagingInformation(const status_information *info)
         info->pid,
         info->comm,
         info->minflt,
-        info->majflt
-    );
+        info->majflt);
 }
 
 void show(const status_information *info, awesomeps_configuration config)
@@ -176,32 +200,19 @@ void show(const status_information *info, awesomeps_configuration config)
     }
 }
 
-static void printConfiguredTableHeader(awesomeps_configuration configuration)
-{
-    if (configuration & GENERAL_INFORMATION)
-    {
-        printTableHeader(generalColumnNames);
-    }
-    else if (configuration & PAGING_INFORMATION)
-    {
-        printTableHeader(pagingColumnNames);
-    }
-    else if (configuration & TIME_INFORMATION)
-    {
-        printTableHeader(timeColumnNames);
-    }
-    else
-    {
-        printf("Display error: unkown configuration\n");
-        exit(-1);
-    }
-}
-
 void showAll(const status_information informations[], unsigned count, awesomeps_configuration configuration)
 {
-    printConfiguredTableHeader(configuration);
+    char header[BUFFER_SIZE];
+    char separator[BUFFER_SIZE];
+    sprintConfiguredTableHeader(configuration, separator, header);
+    printf("%s\n", separator);
+    printf("%s\n", header);
+    printf("%s\n", separator);
     for (unsigned i = 0; i < count; i++)
     {
         show(&informations[i], configuration);
     }
+    printf("%s\n", separator);
+    printf("%s\n", header);
+    printf("%s\n", separator);
 }
