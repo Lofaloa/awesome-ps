@@ -28,7 +28,9 @@ typedef struct awesomeps_option {
 void showFeedback();
 void show(const process *, awesomeps_configuration);
 void showAll(const process[], unsigned, awesomeps_configuration);
+void showHelp();
 unsigned parseCommandlineArguments(int argc, char **argv, awesomeps_option *options);
-void runWithOptions(unsigned argc, char **argv);
+void runWithOptions(awesomeps_option *options, unsigned count);
+void runWithConfiguration(const awesomeps_configuration configuration);
 
 #endif /* AWESOMEPS_IO_H */

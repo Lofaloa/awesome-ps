@@ -239,3 +239,14 @@ void showAll(const process informations[], unsigned count, awesomeps_configurati
     printf("%s\n", header);
     printf("%s\n", separator);
 }
+
+void showHelp()
+{
+    printf("Welcome to AwesomePs!\n");
+    printf("\vHere is the list of available options...\n");
+    printf("\ttopic=<general | paging | time>\n");
+    printf("\tpid=<pid>\n");
+    printf("\tstate=<running | sleeping | waiting | zombie>\n");
+    printf("\vNote: you can set multiple options at once.");
+    printf(" Please refer to the README.md file to learn more about the details of this tool.\n");
+}

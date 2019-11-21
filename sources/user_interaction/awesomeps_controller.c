@@ -55,18 +55,14 @@ awesomeps_configuration getConfiguration(const awesomeps_option *options, unsign
  * Runs awesome ps with the option given by the user. If argc is equal to one
  * then the function does run anything.
  */
-void runWithOptions(unsigned argc, char **argv)
+void runWithOptions(awesomeps_option *options, unsigned count)
 {
     int pids[1000];
     process informations[1000];
     unsigned current = 0;
-    awesomeps_option options[100];
     awesomeps_configuration configuration = EMPTY;
-    unsigned optionsCount = parseCommandlineArguments(argc, argv, options);
-    
-    configuration = getConfiguration(options, optionsCount);
-    
-    searchProcesses(pids, options, optionsCount);
+    configuration = getConfiguration(options, count);
+    searchProcesses(pids, options, count);
     while (pids[current] >= 0)
     {
         process information;
