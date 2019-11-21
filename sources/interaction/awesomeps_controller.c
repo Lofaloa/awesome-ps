@@ -3,8 +3,8 @@
 #include <time.h>
 
 #include "../process_selector.h"
-#include "../status_information_scanner.h"
-#include "../status_information.h"
+#include "../procfs_reader/status_information_scanner.h"
+#include "../procfs_reader/status_information.h"
 
 #include "awesomeps_configuration.h"
 #include "awesomeps_interaction.h"

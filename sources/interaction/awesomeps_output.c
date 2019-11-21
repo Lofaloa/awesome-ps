@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../status_information.h"
+#include "../procfs_reader/status_information.h"
 #include "awesomeps_configuration.h"
 
 #define PROCFS_ROOT "/proc"
