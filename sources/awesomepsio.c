@@ -54,6 +54,30 @@ static void sprintfTime(long unsigned clockTicks, char *buffer)
     );
 }
 
+static void sprintfState(char state, char *buffer)
+{
+    switch(state)
+    {
+        case 'R':
+            sprintf(buffer, "Running");
+            break;
+        case 'S':
+            sprintf(buffer, "Sleeping");
+            break;
+        case 'D':
+            sprintf(buffer, "Waiting");
+            break;
+        case 'Z':
+            sprintf(buffer, "Zombie");
+            break;
+        case 'T':
+            sprintf(buffer, "Stopped");
+            break;
+        default:
+            sprintf(buffer, "Undefined");
+    }
+}
+
 /**
  * Prints the header of a table. The argument is a null terminated array
  * of strings.
@@ -91,11 +115,13 @@ static void printTableHeader(const char **columnNames)
  */
 static void printGeneralInformation(const status_information *info)
 {
+    char buffer[BUFFER_SIZE];
+    sprintfState(info->state, buffer);
     printf(
-        "|%-30d|%-30s|%-30c|%30d|\n",
+        "|%-30d|%-30s|%-30s|%30d|\n",
         info->pid,
         info->comm,
-        info->state,
+        buffer,
         MINOR_DEVICE(info->tty_nr)
     );
 }
