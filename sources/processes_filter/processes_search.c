@@ -38,7 +38,7 @@ static long parseProcessDirectoryName(char *dirname)
     }
 }
 
-void searchProcesses(int *pids, awesomeps_configuration config, awesomeps_option *options)
+void searchProcesses(int *pids, const awesomeps_option *options, unsigned count)
 {
     if (pids != NULL) {
         struct dirent *entry;
@@ -49,7 +49,7 @@ void searchProcesses(int *pids, awesomeps_configuration config, awesomeps_option
             while ((entry = readdir(proc)) != NULL)
             {
                 long pid = parseProcessDirectoryName(entry->d_name);
-                if (pid >= 0 && matchesOptions(pid, config, options))
+                if (pid >= 0 && matchesOptions(pid, options, count))
                 {
                     pids[current] = pid;
                     current++;

@@ -105,11 +105,12 @@ void setOptionFromString(char *str, awesomeps_option *option)
     }
 }
 
-void parseCommandlineArguments(int argc, char **argv, awesomeps_option *options)
+unsigned parseCommandlineArguments(int argc, char **argv, awesomeps_option *options)
 {
+    unsigned count = 0;
     if (options != NULL)
     {
-        for (unsigned count = 0, i = 1; i < argc; i++)
+        for (unsigned i = 1; i < argc; i++)
         {
             awesomeps_option option;
             setOptionFromString(argv[i], &option);
@@ -125,6 +126,7 @@ void parseCommandlineArguments(int argc, char **argv, awesomeps_option *options)
             }
         }
     }
+    return count;
 }
 
 void readOptions(awesomeps_option *options, unsigned count)

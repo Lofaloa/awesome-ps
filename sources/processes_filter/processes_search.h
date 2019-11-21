@@ -1,3 +1,3 @@
-#include "../user_interaction/awesomeps_configuration.h"
+#include "../user_interaction/awesomeps_interaction.h"
 
-void searchProcesses(int *, awesomeps_configuration);
+void searchProcesses(int *, const awesomeps_option *, unsigned);

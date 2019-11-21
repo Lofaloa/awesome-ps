@@ -62,16 +62,18 @@ void runWithOptions(unsigned argc, char **argv)
     unsigned current = 0;
     awesomeps_option options[100];
     awesomeps_configuration configuration = EMPTY;
-    parseCommandlineArguments(argc, argv, options);
-    configuration = getConfiguration(options, argc - 1);
-    searchProcesses(pids, configuration);
-    while (pids[current] >= 0)
-    {
-        process information;
-        readProcessInformation(pids[current], &information);
-        informations[current] = information;
-        current++;
-    }
-    showAll(informations, current, configuration);
-    showFeedback();
+    unsigned optionsCount = parseCommandlineArguments(argc, argv, options);
+    
+    configuration = getConfiguration(options, optionsCount);
+    
+    searchProcesses(pids, options, optionsCount);
+    // while (pids[current] >= 0)
+    // {
+    //     process information;
+    //     readProcessInformation(pids[current], &information);
+    //     informations[current] = information;
+    //     current++;
+    // }
+    // showAll(informations, current, configuration);
+    // showFeedback();
 }

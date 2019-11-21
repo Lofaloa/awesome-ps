@@ -48,7 +48,7 @@ static bool matchesCurrentUserAndTTY(int pid)
     return correspondingUserAndTTY;
 }
 
-static bool matchesUserName(int pid, char* userName)
+static bool matchesUserName(int pid, const char* userName)
 {
     bool correspondingUser = false;
     int userId = findProcessUserId(pid);
@@ -57,38 +57,57 @@ static bool matchesUserName(int pid, char* userName)
     {
         perror("Cannot find the process user id");
     }
-    
-    
     if(strcmp(uName, userName)==0)
     {
         correspondingUser = true;
     }
-    
     return correspondingUser;
 }
 
+static char stateValueToCharacter(char * state)
+{
+    if (strcmp(RUNNING_STATE_VALUE, state) == 0) return 'R';
+    if (strcmp(SLEEPING_STATE_VALUE, state) == 0) return 'S';
+    if (strcmp(WAITING_STATE_VALUE, state) == 0) return 'D';
+    if (strcmp(ZOMBIE_STATE_VALUE, state) == 0) return 'Z';
+    return 0;
+}
 
-static bool matchesState(int pid, char* status)
+static bool matchesState(int pid, char* state)
 {
     bool correspondingStatus = false;
-    char stateChar = status[0];
+    char stateChar = stateValueToCharacter(state);
     process information;
-    if (scanStatFile(pid, &information) == -1)
+    if (scanStatFile(pid, &information) == 0)
     {
-        perror("PID not found.");
-        return correspondingStatus ;
-    }
-    else
-    {
-        if(information.state == stateChar)
-        {
-            correspondingStatus = true;
-        }
+        printf(" %c == %c ", stateChar, information.state);
+        return stateChar == information.state;
     }
     return correspondingStatus;
 }
 
-bool matchesOptions(int pid, awesomeps_configuration config, awesomeps_option *options)
+static bool matchesOption(int pid, const awesomeps_option *option) {
+    bool matches = false;
+    // if (strcmp(USER_KEY, option->key))
+    // {
+    //     matches = matchesUserName(pid, option->value);
+    // }
+    if (strcmp(STATE_KEY, option->key) == 0)
+    {
+        printf("\t by the state: ");
+        matches = matchesState(pid, option->value);
+        printf(" matches => %d\n", matches);
+    }
+    return matches;
+}
+
+bool matchesOptions(int pid, const awesomeps_option *options, unsigned count)
 {
-    return true;
+    unsigned current = 0;
+    printf("filtering pid %d:\n", pid);
+    while (current < count && matchesOption(pid, &options[current]))
+    {
+        current++;
+    }
+    return current == count;
 }
