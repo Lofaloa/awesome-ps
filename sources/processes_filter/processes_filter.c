@@ -58,14 +58,6 @@ static char stateValueToCharacter(char * state)
 //     return correspondingUserAndTTY;
 // }
 
-static bool matchesUserName(int pid, const char* username)
-{
-    char processUserName[256];
-    int real_uid = getUserRealIdentifier(pid);
-    findUserName(real_uid, processUserName);
-    return strcmp(username, processUserName) == 0;
-}
-
 static bool matchesProcessIdentifier(int pid, char* pidString)
 {
     int pidValue = parseProcessIdentifier(pidString);
@@ -86,10 +78,6 @@ static bool matchesState(int pid, char* state)
 
 static bool matchesOption(int pid, const awesomeps_option *option) {
     bool matches = true;
-    if (strcmp(USER_KEY, option->key) == 0)
-    {
-        matches &= matchesUserName(pid, option->value);
-    }
     if (strcmp(PID_KEY, option->key) == 0)
     {
         matches &= matchesProcessIdentifier(pid, option->value);

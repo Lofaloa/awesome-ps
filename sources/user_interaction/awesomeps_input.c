@@ -7,7 +7,6 @@
 #define OPTION_SEPARATOR "="
 
 static const char *keys[] = {
-    USER_KEY,
     STATE_KEY,
     TOPIC_KEY,
     PID_KEY
@@ -59,7 +58,7 @@ static int isSet(const awesomeps_option *options, unsigned count,
  */
 static int isValidKey(char *key)
 {
-    return key != NULL && array_contains(keys, 4, key);
+    return key != NULL && array_contains(keys, 3, key);
 }
 
 // Tells if the given value is valuee for the given key.

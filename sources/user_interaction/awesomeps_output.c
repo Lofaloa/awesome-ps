@@ -10,6 +10,7 @@
 
 #include "../procfs_reader/process.h"
 #include "awesomeps_configuration.h"
+#include "../procfs_reader/user_information.h"
 
 #define PROCFS_ROOT "/proc"
 #define BUFFER_SIZE 256
@@ -154,14 +155,17 @@ static void sprintCurrentTime(char *buffer)
  */
 static void printGeneralInformation(const process *info)
 {
-    char buffer[BUFFER_SIZE];
-    sprintfState(info->state, buffer);
+    char stateBuffer[BUFFER_SIZE];
+    char userNameBuffer[BUFFER_SIZE];
+    sprintfState(info->state, stateBuffer);
+    findUserName(info->pid, userNameBuffer);
     printf(
         "|%-30d|%-30s|%-30s|%30d|\n",
         info->pid,
         info->comm,
-        buffer,
-        MINOR_DEVICE(info->tty_nr));
+        stateBuffer,
+        MINOR_DEVICE(info->tty_nr)
+    );
 }
 
 static void printTimeInformation(const process *info)
