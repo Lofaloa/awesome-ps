@@ -5,6 +5,7 @@
 #include "../processes_filter/process_selector.h"
 #include "../procfs_reader/status_information_scanner.h"
 #include "../procfs_reader/status_information.h"
+#include "../procfs_reader/procfs_reader.h"
 
 #include "awesomeps_configuration.h"
 #include "awesomeps_interaction.h"
@@ -78,7 +79,7 @@ void runWithOptions(unsigned argc, char **argv)
     while (pids[current] >= 0)
     {
         status_information information;
-        scanStatusInformation(pids[current], &information);
+        readProcessInformationFor(pids[current], &information);
         informations[current] = information;
         current++;
     }

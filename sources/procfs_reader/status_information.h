@@ -37,6 +37,8 @@ typedef struct status_information
     long unsigned vsize;
     long int rss;
     long unsigned rsslim;
+    int uid;
+    char user_name[256];
     /* And a lot of others, some of them are marked by [PT], we should look
      * into that.
      */

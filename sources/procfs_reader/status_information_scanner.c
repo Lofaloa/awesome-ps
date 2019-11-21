@@ -33,6 +33,7 @@ static const char *STATUS_INFORMATION_FORMAT =
  */
 int scanStatusInformation(int pid, status_information *information)
 {
+    printf("\tin stat scanner for pid %d\n", pid);
     if (information != NULL)
     {
         char path[BUFFER_SIZE];
@@ -67,6 +68,7 @@ int scanStatusInformation(int pid, status_information *information)
                    &(information->rss),
                    &(information->rsslim));
             fclose(fp);
+            printf("\tout stat scanner for pid %d\n", pid);
             return 0;
         }
     }
