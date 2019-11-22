@@ -64,7 +64,7 @@ static bool matchesState(int pid, char* state)
 
 static bool matchesUserName(int pid, char* username)
 {
-    char processUsername[] = "" ;
+    char processUsername[256];
     int processUserId = getUserRealIdentifier(pid);
     
     findUserName(processUserId, processUsername);
