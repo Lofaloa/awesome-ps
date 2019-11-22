@@ -51,15 +51,36 @@ Cette fonction lit la chaine de caractères passée en paramètres et initialise
 
 La clé doit être disponibles. Nous avons définit une liste clés que nous voulons mettre à disposition. La clé doit être l'une d'entre elles. Et la valeur doit être intègre. Nous tranchons sur base de la clé (chaque clé à un domaine prédéfini). Dans le cas la validité n'est pas assurée, la structure n'est pas initialisée et le programme sort avec un status d'erreur. Nous devons sortir puisque l'utilisateur doit être informé de son erreur.
 
+Après la conversion chaque structures est ajoutée à un tableau. Le tableau serait ensuite utilisé par notre programme pour répondre au demande de l'utilisateur.
+
 \subsection{Affichage des données}
-Nous avons pris la décision d'organiser les données relatives aux processus sur base de sujets. Les sujets représentent un moyen simplifié de sélectionner les données d'un processus. Pour chaque sujet que nous avons implémenté, nous avons sélectionné une série de données que nous avons jugées pertinentes.
+Nous avons pris la décision d'organiser les données relatives aux processus sur base de sujets. Les sujets représentent un moyen simplifié de sélectionner les données d'un processus. Pour chacun d'eux, nous avons sélectionné une série de données que nous avons jugées pertinentes. Actuellement, l'utilisateur peut utiliser les sujets suivants: général, pagination et temps. Dans le futur, nous pouvons imaginer en ajouter beaucoup plus.
 
-Pour spécifier un sujet, l'utilisateur doit simplement donner une valeur pour la catégorie d'option "topic". Par exemple, une exécution de AwesomePs qui affiche les données générales serait...
+L'affichage est organisé sous forme de tableau. Chaque colonne représente une donnée. Chaque ligne représente un processus. Voici un exemple d'affichage.
 
-\begin{lstlisting}[frame=single, language=bash]
-$ > ./awesomeps topic=general
+\begin{lstlisting}[frame=single, language=c]
+$ > ./awesomeps
++------------+------------+-------------+------------+
+|PID         |COMMANDE    |STATE        |TERMINAL    |
++------------+------------+-------------+------------+
+|8281        |(bash)      |Sleeping     |           2|
+|8304        |(awesomeps) |Running      |           2|
++------------+------------+-------------+------------+
+|PID         |COMMANDE    |STATE        |TERMINAL    |
++------------+------------+-------------+------------+
+
+Current time: 2019-11-22 11:29:17
+
+$ >
 \end{lstlisting}
 
-Le sujet par défaut est appelé "general". Il s'agit d'un sujet qui a pour but de sélectionner les informations basiques d'un processus. Le pid, le nom de la commande, l'état et le terminal courant du processus sont affichés.
+Cette exemple montre un affichage par défaut. Ici, seule les processus enfant du bash courant sont affichés. Le sujet par défaut est le général.
 
-% Décrire les autres sujets
+\subsubsection{Sujets disponibles et leur implémentation}
+\begin{itemize}
+\item Le sujet par défaut est appelé "general". Il s'agit d'un sujet qui a pour but de sélectionner les informations basiques d'un processus. Le pid, le nom de la commande, l'état et le terminal courant du processus sont affichés.
+
+\item "paging" est un sujet relatif à la pagination d'un processus. Il affiche le pid, la commande, le nombre de défaut de page majeur et mineur.
+
+\item "time" est un sujet relatif à la durée d'exécution d'un processus. Il affiche le pid, la commande, le temps passé en mode user et mode système.
+\end{itemize}
