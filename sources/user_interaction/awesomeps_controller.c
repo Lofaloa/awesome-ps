@@ -43,11 +43,15 @@ void setConfiguration(awesomeps_configuration *config, awesomeps_option *opt)
 awesomeps_configuration getConfiguration(const awesomeps_option *options, unsigned count)
 {
     awesomeps_configuration configuration = EMPTY;
+    int hasTopicBeenSet = 0;
     for (unsigned i = 0; i < count; i++)
     {
         awesomeps_option currentOption = options[i];
         setConfiguration(&configuration, &currentOption);
+        if (strcmp(currentOption.key, TOPIC_KEY) == 0)
+            hasTopicBeenSet = 1;
     }
+    if (!hasTopicBeenSet) configuration |= DEFAULT_CONFIGURATION;
     return configuration;
 }
 

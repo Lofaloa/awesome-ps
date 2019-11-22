@@ -116,6 +116,10 @@ static void sprintTableHeader(const char **titles, char *separator, char *header
 static void sprintConfiguredTableHeader(awesomeps_configuration config,
                                         char *separator, char *header)
 {
+    if (config & DEFAULT_CONFIGURATION)
+    {
+        sprintTableHeader(generalColumnNames, separator, header);
+    }    
     if (config & GENERAL_INFORMATION)
     {
         sprintTableHeader(generalColumnNames, separator, header);
@@ -206,22 +210,21 @@ void showFeedback(awesomeps_configuration config)
 
 void show(const process *info, awesomeps_configuration config)
 {
+    if (config & DEFAULT_CONFIGURATION)
+    {
+        printGeneralInformation(info);
+    }    
     if (config & GENERAL_INFORMATION)
     {
         printGeneralInformation(info);
     }
-    else if (config & PAGING_INFORMATION)
+    if (config & PAGING_INFORMATION)
     {
         printPagingInformation(info);
     }
-    else if (config & TIME_INFORMATION)
+    if (config & TIME_INFORMATION)
     {
         printTimeInformation(info);
-    }
-    else
-    {
-        printf("Display error: please select a topic.\n");
-        exit(-1);
     }
 }
 
