@@ -6,7 +6,7 @@ COMPILER = gcc
 COMPILER_FLAGS = -std=c99 -pedantic-errors -Wall
 LINKER_FLAGS = -std=c99 -pedantic-errors -Wall
 
-REPORT_FILE_NAME = "report"
+REPORT_FILE_NAME = "RapportLoganFarciEtAlexandreBaudot"
 REPORT_MAIN_SOURCE = ./report/main.tex
 
 ################################ PROJECT FILES ################################
