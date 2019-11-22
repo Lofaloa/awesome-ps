@@ -66,15 +66,8 @@ static bool matchesUserName(int pid, char* username)
 {
     char processUsername[256];
     int processUserId = getUserRealIdentifier(pid);
-    
     findUserName(processUserId, processUsername);
-    
-    if(strcmp(username, processUsername) == 0)
-    {
-        return true;
-    }
-    
-    return false;
+    return (strcmp(username, processUsername) == 0);
 }
 
 static bool matchesOption(int pid, const awesomeps_option *option) {

@@ -67,8 +67,6 @@ $ ./awesomeps pid=237
 ***Note :*** il est impératif de spécifier le sujet choisi.
 
 #### Sélection sur base de l'utilisateur
-***Attention :*** bien que l'option ait été implémentée un problème persiste et la sélection sur base de l'utilisateur n'est pas fiable.
-
 Ce type de sélection est spécifié par la clé ```user```. Elle permet à l'utilisateur de sélectionner les processus à afficher sur base de l'utilisateur. Par exemple, si l'on veut sélectionner les processus appartenant à l'utilisateur "*doe*", nous l'appel se fait de cette manière.
 ```
 $ ./awesomeps user=doe

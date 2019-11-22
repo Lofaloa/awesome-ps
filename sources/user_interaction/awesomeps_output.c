@@ -22,7 +22,7 @@ typedef struct time
     unsigned seconds;
 } hms_time;
 
-const char *generalColumnNames[] = {"PID", "COMMANDE", "STATE", "TERMINAL", NULL};
+const char *generalColumnNames[] = {"PID", "COMMANDE", "STATE", "TERMINAL", "USERNAME", NULL};
 const char *timeColumnNames[] = {"PID", "COMMANDE", "USER TIME", "KERNEL TIME", NULL};
 const char *pagingColumnNames[] = {"PID", "COMMANDE", "MINOR FAULTS", "MAJOR FAULTS", NULL};
 
@@ -157,14 +157,16 @@ static void printGeneralInformation(const process *info)
 {
     char stateBuffer[BUFFER_SIZE];
     char userNameBuffer[BUFFER_SIZE];
+    unsigned uid = getUserRealIdentifier(info->pid);
     sprintfState(info->state, stateBuffer);
-    findUserName(info->pid, userNameBuffer);
+    findUserName(uid, userNameBuffer);
     printf(
-        "|%-30d|%-30s|%-30s|%30d|\n",
+        "|%-30d|%-30s|%-30s|%30d|%30s|\n",
         info->pid,
         info->comm,
         stateBuffer,
-        MINOR_DEVICE(info->tty_nr)
+        MINOR_DEVICE(info->tty_nr),
+        userNameBuffer
     );
 }
 
