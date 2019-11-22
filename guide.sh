@@ -27,7 +27,8 @@ HELP_OPTION="help"
 ############################ FUNCTION DECLARATIONS ############################
 
 function startDemonstration {
-    bash $DEMO_SCRIPT
+    # bash $DEMO_SCRIPT
+    echo "No demonstration has been implemented yet."
 }
 
 function showReport {
