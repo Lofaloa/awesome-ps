@@ -1,30 +1,55 @@
 \section{Module d'interaction avec l’utilisateur}
-Dans cette section, nous exposons les différents mécanismes utilisé pour faciliter et gérer l’interaction avec l’utilisateur. Cela englobe l’affichage des données sur la sortie standard et la gestion des paramètres entrés par l’utilisateur à l’exécution du programme.
+Dans cette section, nous exposons les différents mécanismes utilisés pour faciliter et gérer l’interaction avec l’utilisateur. Cela englobe l’affichage des données sur la sortie standard et la gestion des paramètres entrés par l’utilisateur à l’exécution du programme.
 
 \subsection{Guide}
 Le guide est un script bash qui a pour but de faciliter l'utilisation notre projet et de ses resources. Il permet à l'utilisateur de compiler le projet, de visualiser le rapport et de lancer une démonstration.
 
 \subsection{Gestion des paramètres de programme}
-AwesomePs permet à l'utilisateur de spécifier une série d'options à l'exécution du programme. Ils lui permettent d'indiquer des critères de sélection ou de choisir un  (pour rappel un sujet regroupe des données relatives à un processus).
+\subsubsection{Vue d'ensemble}
+AwesomePs permet à l'utilisateur de spécifier une série d'options à l'exécution du programme. Elles lui permettent d'indiquer des critères de sélection ou de choisir un ensemble de données à afficher (pour rappel un sujet regroupe des données relatives à un processus). Elles sont passées comme une série de clés et de valeurs lors de l'exécution.
 
-Nous interprétons les paramètres comme un ensemble de clés et de valeurs. La clé correspond au type de l'option. Actuellement, trois catégories d'options sont disponibles.
+Par exemple, un appel correcte à l'exécutable pourrait ressembler à "./awesomeps topic=general state=sleeping". Ici, l'utilisateur demande à AwesomePs d'afficher les informations générales pour tous les processus qui ont l'état "sleeping". Vous pouvez retrouver l'ensemble des options disponibles dans le fichier README.md qui se trouve à la racine du projet.
 
-\begin{itemize}
-\item "user" pour filtrer la liste des processus sur base de l'utilisateur.
-\item "status" pour filtrer la liste des processes sur base de leur statut. Cette option accepte les valeurs suivantes :
-    \begin{itemize}
-        \item "running" : pour sélectionner les processus en cours d'exécution.
-        \item "sleeping" : pour sélectionner les processus en attente de resources (interruptible).
-        \item "waiting" : pour sélectionner les processus en attente.
-        \item "zombie" : pour sélectionner les processus zombie.
-    \end{itemize}
-\item "topic" pour sélectionner les données à afficher pour un processus dans la liste sélectionnée.
-    \begin{itemize}
-        \item "general" : pour afficher les données générales relatives à un processus.
-    \end{itemize}
-\end{itemize}
+\subsubsection{Implémentation de la gestion des paramètres}
+Les options passées à l'exécution de AwesomePs doivent être interprétées avant de pouvoir être utilisées dans notre code. Pour commencer, nous définissons une simple structure. Elle nous permet de représenter une option passée en ligne de commande par un couple de deux chaînes de caractères. La première identifie la catégorie de l'option. La seconde identifie la valeur associée à la catégorie représentée.
 
-\subsubsection{Exemples d'utilisation}
+Vous pouvez retrouver sa définition dans le fichier "sources/user\_interaction/awesomeps\_interaction.h".
+
+\begin{lstlisting}[frame=single, language=c]
+typedef struct awesomeps_option {
+    char *key;
+    char *value;
+} awesomeps_option;
+\end{lstlisting}
+
+Les paramètres passés en ligne de commande sont directement interprétés. L'objectif est de convertir le tableau de chaines de caractères passé au programme en un tableau de structures. Cette étape est implémentée dans le fichier "sources/user\_interaction/awesomeps\_input.c".
+
+Durant la lecture des paramètres de programme, nous interprétons les chaines de caractères en structures. Nous implémentons cette conversion dans la fonction qui suit.
+
+\begin{lstlisting}[frame=single, language=c]
+void setOptionFromString(char *str, awesomeps_option *option) {
+    char *key = strtok(str, OPTION_SEPARATOR);
+    char *value = strtok(NULL, OPTION_SEPARATOR);
+    if (isValidKey(key)) {
+        if (isValidValueForKey(key, value)) {
+            option->key = key;
+            option->value = value;
+        } else {
+            printf(
+                "Option parsing error: %s isn't a valid value for %s.\n",
+                value, key);
+            exit(-1);
+        }
+    } else {
+        printf("Option parsing error: %s is not a valid option\n", str);
+        exit(-1);
+    }
+}
+\end{lstlisting}
+
+Cette fonction lit la chaine de caractères passée en paramètres et initialise une structure awesomeps\_option. Elle l'initialise avec les valeurs extraites de "str". Pour séparer la clé de sa valeur, nous utilisons la fonction standard strtok. Après la séparation, nous vérifions la validité de la clé et de la valeur avant d'initialiser la structure.
+
+La clé doit être disponibles. Nous avons définit une liste clés que nous voulons mettre à disposition. La clé doit être l'une d'entre elles. Et la valeur doit être intègre. Nous tranchons sur base de la clé (chaque clé à un domaine prédéfini). Dans le cas la validité n'est pas assurée, la structure n'est pas initialisée et le programme sort avec un status d'erreur. Nous devons sortir puisque l'utilisateur doit être informé de son erreur.
 
 \subsection{Affichage des données}
 Nous avons pris la décision d'organiser les données relatives aux processus sur base de sujets. Les sujets représentent un moyen simplifié de sélectionner les données d'un processus. Pour chaque sujet que nous avons implémenté, nous avons sélectionné une série de données que nous avons jugées pertinentes.

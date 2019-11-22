@@ -1,20 +1,22 @@
 \section{Module de sélection des processus}
-La sélection des processus se fait sur la base du process id, celui-ci est récupéré en parsant les dossiers de processus sous le dossier /proc. Le but étant de récupérer tous les dossiers ayant un nom alphanumérique pour les associer à un processus et récupérer leurs données. 
+\subsection{Vue d'ensemble}
+L'objectif de ce module est de lister les processus actifs du système. Pour mettre cela en place, nous utilisons le système de fichier virtuel /proc. Il contient, à sa racine, un dossier pour chacun des processus actifs. Le fonctionnement de ce module est donc très simple. Il parcours la racine de /proc pour y sélectionner les dossiers qui contiennent les informations d'un processus. Ce type de dossier est nommé par le pid pour lequel il garde des informations (seul critère de sélection). Lors de la sélection, nous rajoutons des critères basés sur les informations du processus identifiés. Ces critères sont spécifiés par l'utilisateur.
 
-La sélection des process peut se faire de trois manières différentes par l’utilisateur :
+Les critères de sélection disponibles sont :
 
 \begin{itemize}
-\item Sur base de l’état du process
-\item Sur base de l’utilisateur du process
-\item Sur base de l’utilisateur et du terminal courant (comme la commande “ps” 
-fournie par linux)
+\item Sur base de l'identifiant du process ;
+\item Sur base de l’état du process ;
+\item Sur base de l’utilisateur du process ;
+\item Sur base de l’utilisateur et du shell courant (comme la commande “ps” 
+fournie par Linux) ;
 \end{itemize}
 
 \subsection{Sur base de l'état du process} 
-Filtrage où seul les process dans un état spécifique donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “process\_selector.matchStatus()” cette fonction va lire les informations contenues dans le fichier “/proc/[pid]/status” à l’aide de la fonction “scanStatusInformation()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
+Filtre où seul les process dans un état spécifique donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “process\_selector.matchStatus()” cette fonction va lire les informations contenues dans le fichier “/proc/[pid]/status” à l’aide de la fonction “scanStatusInformation()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
 
 \subsection{Sur base de l’utilisateur du process}
-Filtrage où seul les process dont l’userId correspond à l’user donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “process\_selector.mathUser()”. Qui va tout d’abord se charger de récupérer l’id de l’utilisateur du process id passé en paramètre grâce à la fonction “findProcessUserId()” puis ensuite de le convertir en nom d’utilisateur grâce à la fonction “findUserName()” pour enfin comparer l’entrée de l’utilisateur et le nom de l’utilisateur du process.
+Filtrage où seul les process dont l’userId correspond à l’user donné par l’utilisateur seront sélectionnés. Pour cela nous utilisons la fonction “process\_selector.mathUser()”. Qui va tout d’abord se charger de récupérer l’id de l’utilisateur du process id passé en paramètre grâce à la fonction “findProcessUserId()” puis ensuite de le convertir en nom d’utilisateur grâce à la fonction “findUserName()” pour enfin comparer l’entrée de l’utilisateur et le nom de l’utilisateur du process.
 
 \subsection{Sur base de l’utilisateur et du terminal courant} 
 La fonction va comme dans un ps de base trier les process en regardant si leur userId correspond au process courant et également faire un tri sur base du terminal en comparant le terminal du process (TTY) au terminal courant via la fonction “ttyname()”. 
