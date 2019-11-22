@@ -11,6 +11,6 @@ int getUserRealIdentifier(const int pid);
 /**
  * Find a user name with an user id.
  * 
- * returns : -1 if fail, userId if sucessful
+ * returns : -1 if fail, user name if sucessful
  */
 void findUserName(int userId, char *buffer);

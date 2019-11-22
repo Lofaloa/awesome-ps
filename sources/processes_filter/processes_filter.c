@@ -62,6 +62,21 @@ static bool matchesState(int pid, char* state)
     return false;
 }
 
+static bool matchesUserName(int pid, char* username)
+{
+    char processUsername[] = "" ;
+    int processUserId = getUserRealIdentifier(pid);
+    
+    findUserName(processUserId, processUsername);
+    
+    if(strcmp(username, processUsername) == 0)
+    {
+        return true;
+    }
+    
+    return false;
+}
+
 static bool matchesOption(int pid, const awesomeps_option *option) {
     bool matches = true;
     if (strcmp(DEFAULT_KEY, option->key) == 0)
@@ -75,6 +90,10 @@ static bool matchesOption(int pid, const awesomeps_option *option) {
     if (strcmp(STATE_KEY, option->key) == 0)
     {
         matches &= matchesState(pid, option->value);
+    }
+    if (strcmp(USER_KEY, option ->key) == 0)
+    {
+        matches &= matchesUserName(pid, option->value);
     }
     return matches;
 }

@@ -7,6 +7,7 @@
 #define OPTION_SEPARATOR "="
 
 static const char *keys[] = {
+    USER_KEY,
     STATE_KEY,
     TOPIC_KEY,
     PID_KEY

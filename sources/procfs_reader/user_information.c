@@ -71,27 +71,6 @@ int getUserRealIdentifier(const int pid)
 
 void findUserName(int userId, char *username)
 {
-    // FILE *fp;
-    // char *line = NULL;
-    // size_t length = 0;
-    // ssize_t read;
-    // char *tokens[30];
-    // int i = 0;
-    // fp = fopen("/etc/passwd", "r");
-    // while ((read = getline(&line, &length, fp)) != -1)
-    // {
-    //     i = 0;
-    //     tokens[i] = strtok(line, ":");
-    //     while (tokens[i] != NULL)
-    //         tokens[++i] = strtok(NULL, ":");
-    //     if (atoi(tokens[2]) == userId)
-    //     {
-    //         sprintf(username, "%s", tokens[0]);
-    //     }
-    // }
-    // fclose(fp);
-    // if (line)
-    //     free(line);
     struct passwd *user = getpwuid(userId);
     if (user == NULL)
     {
