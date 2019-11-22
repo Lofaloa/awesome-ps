@@ -59,7 +59,7 @@ static int isSet(const awesomeps_option *options, unsigned count,
  */
 static int isValidKey(char *key)
 {
-    return key != NULL && array_contains(keys, 3, key);
+    return key != NULL && array_contains(keys, sizeof(keys) / sizeof(keys[0]), key);
 }
 
 // Tells if the given value is valuee for the given key.
