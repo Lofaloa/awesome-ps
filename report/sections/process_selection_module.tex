@@ -13,10 +13,81 @@ fournie par Linux) ;
 \end{itemize}
 
 \subsection{Sur base de l'état du process} 
-Filtre où seul les process dans un état spécifique donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “process\_selector.matchStatus()” cette fonction va lire les informations contenues dans le fichier “/proc/[pid]/status” à l’aide de la fonction “scanStatusInformation()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
+Filtre où seul les process dans un état spécifique donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “processes_filter.matchesState()” cette fonction va scanner le fichier à l’aide de la fonction "scanStatFile()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
+
+Pour cela nous utilisons également une fonction  stateValueToCharacter() qui se charge de transformer l'entrée utilisateur en quelque chose de lisible par la fonction matchesState().
+
+\begin{lstlisting}[frame=single, language=c]
+static bool matchesState(int pid, char* state)
+{
+    char stateChar = stateValueToCharacter(state);
+    process information;
+    if (scanStatFile(pid, &information) == 0)
+    {
+        return stateChar == information.state;
+    }
+    return false;
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item Conversion de l'entrée utilisateur via stateValueToCharacter()
+\item Scan des informations du process via scanStatFile()
+\item Comparaison du caractère qui définis l'état du process et l'entrée utilisateur convertie
+\end{itemize}
+
 
 \subsection{Sur base de l’utilisateur du process}
-Filtrage où seul les process dont l’userId correspond à l’user donné par l’utilisateur seront sélectionnés. Pour cela nous utilisons la fonction “process\_selector.mathUser()”. Qui va tout d’abord se charger de récupérer l’id de l’utilisateur du process id passé en paramètre grâce à la fonction “findProcessUserId()” puis ensuite de le convertir en nom d’utilisateur grâce à la fonction “findUserName()” pour enfin comparer l’entrée de l’utilisateur et le nom de l’utilisateur du process.
+Filtrage où seul les process dont l’userId correspond à l’user donné par l’utilisateur seront sélectionnés. Pour cela nous utilisons la fonction “processes_filter.matchesUserName()”. Qui va tout d’abord se charger de récupérer l’id de l’utilisateur du process avec getUserRealIdidentifier().
+
+On va ensuite récupérer le nom de l'utilisateur du process avec la fonction findUserName() présente dans user_informaions.c qui va donc convertir un user id en nom.
+
+
+\begin{lstlisting}[frame=single, language=c]
+static bool matchesUserName(int pid, char* username)
+{
+    char processUsername[256];
+    int processUserId = getUserRealIdentifier(pid);
+    findUserName(processUserId, processUsername);
+    return (strcmp(username, processUsername) == 0);
+}
+\end{lstlisting}
+
+
 
 \subsection{Sur base de l’utilisateur et du terminal courant} 
-La fonction va comme dans un ps de base trier les process en regardant si leur userId correspond au process courant et également faire un tri sur base du terminal en comparant le terminal du process (TTY) au terminal courant via la fonction “ttyname()”. 
+Ici nous allons comme dans le ps de base, n'afficher que les process correspondants à l'utilisateur courant ainsi qu'au terminal courant. Pour cela nous utilisons matchCurrentUser() et matchesCurrentTerminal().
+
+
+\begin{lstlisting}[frame=single, language=c]
+static bool matchesCurrentUser(int pid)
+{
+    int userRealIdentifier = getUserRealIdentifier(pid);
+    if (userRealIdentifier >= 0)
+    {
+        return getuid() == userRealIdentifier;
+    }
+    return false;
+}
+\end{lstlisting}
+
+Dans matchesCurrentUser() : On compare l'utilisateur du process avec l'utilisateur du process courant. On utilise la fonction standard "getuid()" pour récupérer l'user id de l'utilisateur courant.
+
+
+\begin{lstlisting}[frame=single, language=c]
+static bool matchesCurrentTerminal(int pid)
+{
+    process information;
+    if (scanStatFile(pid, &information) == 0)
+    {
+        return getppid() == information.ppid || information.pid == getppid();
+    }
+    return false;
+}
+\end{lstlisting}
+
+Dans matchesCurrentTerminal() : On récupère les informations du process pour en trouver l'id du process père et le comparer à l'id du process courant. La fonction standard getppid() est utilisée pour récuperer l'id du père du process courant.
+
+\subsection{Plusieurs options simultanées} 
+
+Avec la fonction matchesOption() nous pouvons faire en sorte que le process soit choisi selon plusieurs critères au lieu d'un seul. 
