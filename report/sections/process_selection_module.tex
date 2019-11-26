@@ -13,7 +13,7 @@ fournie par Linux) ;
 \end{itemize}
 
 \subsection{Sur base de l'état du process} 
-Filtre où seul les process dans un état spécifique donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “processes_filter.matchesState()” cette fonction va scanner le fichier à l’aide de la fonction "scanStatFile()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
+Filtre où seul les process dans un état spécifique donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “processes\_filter.matchesState()” cette fonction va scanner le fichier à l’aide de la fonction "scanStatFile()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
 
 Pour cela nous utilisons également une fonction  stateValueToCharacter() qui se charge de transformer l'entrée utilisateur en quelque chose de lisible par la fonction matchesState().
 
@@ -38,9 +38,9 @@ static bool matchesState(int pid, char* state)
 
 
 \subsection{Sur base de l’utilisateur du process}
-Filtrage où seul les process dont l’userId correspond à l’user donné par l’utilisateur seront sélectionnés. Pour cela nous utilisons la fonction “processes_filter.matchesUserName()”. Qui va tout d’abord se charger de récupérer l’id de l’utilisateur du process avec getUserRealIdidentifier().
+Filtrage où seul les process dont l’userId correspond à l’user donné par l’utilisateur seront sélectionnés. Pour cela nous utilisons la fonction “processes\_filter.matchesUserName()”. Qui va tout d’abord se charger de récupérer l’id de l’utilisateur du process avec getUserRealIdidentifier().
 
-On va ensuite récupérer le nom de l'utilisateur du process avec la fonction findUserName() présente dans user_informaions.c qui va donc convertir un user id en nom.
+On va ensuite récupérer le nom de l'utilisateur du process avec la fonction findUserName() présente dans user\_informaions.c qui va donc convertir un user id en nom.
 
 
 \begin{lstlisting}[frame=single, language=c]

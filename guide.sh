@@ -15,7 +15,7 @@
 ################################ CONFIGURATION ################################
 TARGET_DIRECTORY="./target"
 DEMO_SCRIPT="./demonstration/start.sh"
-REPORT_FILE="$TARGET_DIRECTORY/report.pdf"
+REPORT_FILE="$TARGET_DIRECTORY/RapportLoganFarciEtAlexandreBaudot.pdf"
 REQUIRED_OPTIONS=1
 
 ################################## CONSTANTS ##################################
@@ -35,7 +35,7 @@ function showReport {
     if [ ! -f $REPORT_FILE ]; then
         make
     fi
-    evince ./target/report.pdf || echo "Failed to open $REPORT_FILE!"
+    evince $REPORT_FILE || echo "Failed to open \"$REPORT_FILE\" !"
 }
 
 function installAwesomePS {
