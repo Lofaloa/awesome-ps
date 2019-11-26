@@ -67,10 +67,61 @@ int scanStatFile(int pid, process *information)
 \end{lstlisting}
 
 \subsection{Lecture des données utilisateur}
-Pour trouver l’utilisateur du process ainsi que son nom, nous créons 2 fonctions dans le fichier "sources/procfs\_reader/user\_information.c" : 
+Au niveau des données utilisateur nous avons créé deux fonctions distinctes pour récupérer des des informations :
 
 \begin{itemize}
-\item findProcessUserId(int pid) : Se charge de trouver l’id linux de l’utilisateur dont l’id du process a été passé en paramètres. Cette fonction va se charger de lire le fichier “/proc/[pid]/status” et d’en extraire l’user id.
+\item getUserReadIdentifier(const int pid) : Trouver l'id de l'utilisateur correspondant au pid du process passé en paramètre.
 
 \item findUserName(int userId) : Elle va se charger de convertir un id d’utilisateur en nom en chaîne de caractères correspondant au nom de l’utilisateur. Cette fonction va donc dans le fichier /etc/passwd lire l’entrée utilisateur correspondant à l’id donné en paramètre.
 \end{itemize}
+
+\subsubsection{getUserReadIdentifier() : Trouver l'id de l'utilisateur.}
+Pour trouver l'id de l'utilisateur correspondant à un process id ici nous allons ouvrir le fichier /proc/[pid]/status et y lire l'entrée correspondant au RUID.
+
+\begin{itemize}
+\item L'ouverture du fichier se fait grâce à la fonction fonpenStatusFileOf(pid).
+
+\item La récupération de l'id de l'utlisateur est réalisée par tokenisation des lignes dans le fichier status, l'id est récupéré lorsqu'on trouve l'entrée correspondante à "uid".
+\end{itemize}
+
+\begin{lstlisting}[frame=single, language=c]
+int getUserRealIdentifier(const int pid)
+{
+    char line[BUFFER_SIZE];
+    char *currentLineTokens[BUFFER_SIZE];
+    FILE *status = fopenStatusFileOf(pid);
+    while (fgets(line, sizeof(line), status))
+    {
+        tokenizeStatusFileLine(line, currentLineTokens);
+        if (strcmp(currentLineTokens[0], USER_ID_KEY) == 0)
+        {
+            return parseStringToUnsigned(currentLineTokens[1]);
+        }
+    }
+    fclose(status);
+    return -1;
+}
+\end{lstlisting}
+
+\subsubsection{findUserName() : Convertir l'id en nom d'utilisateur.}
+La conversion est simple et utilise la fonction c getpwuid() qui nous permet d'avoir les informations correspondantes à un userId.
+
+En récupérant le champ pw_name de la structure passwd on obtient le nom de l'utilisateur
+
+\begin{lstlisting}[frame=single, language=c]
+void findUserName(int userId, char *username)
+{
+    struct passwd *user = getpwuid(userId);
+    if (user == NULL)
+    {
+        sprintf(username, "%d", userId);
+    }
+    else
+    {
+        sprintf(username, "%s", user->pw_name);
+    }
+}
+\end{lstlisting}
+
+
+
