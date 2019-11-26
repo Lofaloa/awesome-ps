@@ -106,7 +106,7 @@ int getUserRealIdentifier(const int pid)
 \subsubsection{findUserName() : Convertir l'id en nom d'utilisateur.}
 La conversion est simple et utilise la fonction c getpwuid() qui nous permet d'avoir les informations correspondantes à un userId.
 
-En récupérant le champ pw_name de la structure passwd on obtient le nom de l'utilisateur
+En récupérant le champ pw\_name de la structure passwd on obtient le nom de l'utilisateur
 
 \begin{lstlisting}[frame=single, language=c]
 void findUserName(int userId, char *username)
@@ -118,7 +118,7 @@ void findUserName(int userId, char *username)
     }
     else
     {
-        sprintf(username, "%s", user->pw\_name);
+        sprintf(username, "%s", user->pw_name);
     }
 }
 \end{lstlisting}
