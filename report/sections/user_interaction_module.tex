@@ -8,7 +8,7 @@ Le guide est un script bash qui a pour but de faciliter l'utilisation notre proj
 \subsubsection{Vue d'ensemble}
 AwesomePs permet à l'utilisateur de spécifier une série d'options à l'exécution du programme. Elles lui permettent d'indiquer des critères de sélection ou de choisir un ensemble de données à afficher (pour rappel un sujet regroupe des données relatives à un processus). Elles sont passées comme une série de clés et de valeurs lors de l'exécution.
 
-Par exemple, un appel correcte à l'exécutable pourrait ressembler à "./awesomeps topic=general state=sleeping". Ici, l'utilisateur demande à AwesomePs d'afficher les informations générales pour tous les processus qui ont l'état "sleeping". Vous pouvez retrouver l'ensemble des options disponibles dans le fichier README.md qui se trouve à la racine du projet.
+Par exemple, un appel correct à l'exécutable pourrait ressembler à "./awesomeps topic=general state=sleeping". Ici, l'utilisateur demande à AwesomePs d'afficher les informations générales pour tous les processus qui ont l'état "sleeping". Vous pouvez retrouver l'ensemble des options disponibles dans le fichier README.md qui se trouve à la racine du projet.
 
 \subsubsection{Implémentation de la gestion des paramètres}
 Les options passées à l'exécution de AwesomePs doivent être interprétées avant de pouvoir être utilisées dans notre code. Pour commencer, nous définissons une simple structure. Elle nous permet de représenter une option passée en ligne de commande par un couple de deux chaînes de caractères. La première identifie la catégorie de l'option. La seconde identifie la valeur associée à la catégorie représentée.
