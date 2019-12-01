@@ -1,11 +1,11 @@
 \section{Le système de fichiers /proc}
-Cette section a pour but de donner, au lecteur, les clés pour comprendre le fonctionnement de notre outil. L'implémentation repose entièrement sur la lecture du système de fichiers /proc. Par conséquent, nous avons jugé qu'il était utile d'expliquer brièbement son fonctionnement et de décrire son contenu.
+Cette section a pour but de donner, au lecteur, les clés pour comprendre le fonctionnement de notre outil. L'implémentation repose entièrement sur la lecture du système de fichiers /proc. Par conséquent, nous avons jugé qu'il était utile d'expliquer brièvement son fonctionnement et de décrire son contenu.
 
 \subsection{Description}
-/proc est un système de fichiers virtuel. Il permet d'interagir avec des resources propres au noyau du système d'exploitation. Il joue le rôle d'interface entre ces resources et un utilisateur (physique ou logiciel). Pour faciliter la lecture de /proc, il est présenté sous forme de système fichiers. Ainsi, il peut être lu en utilisant les mêmes appels systèmes qu'une lecture d'un système de fichiers classique. Contrairement à cette deuxième catégorie, un système de fichiers virtuels n'est pas persisté. Il se trouve dans la mémoire R.A.M. lors de l'exécution du système. Il est créé dynamiquement au démarrage et monté sur le point /proc, il est ensuite tenu à jour par le noyau.
+/proc est un système de fichiers virtuel. Il permet d'interagir avec des resources propres au noyau du système d'exploitation. Il joue le rôle d'interface entre ces resources et un utilisateur (physique ou logiciel). Pour faciliter la lecture de /proc, il est présenté sous forme de système de fichiers. Ainsi, il peut être lu en utilisant les mêmes appels systèmes qu'une lecture d'un système de fichiers classique. Contrairement à cette deuxième catégorie, un système de fichiers virtuels n'est pas persisté. Il se trouve dans la mémoire R.A.M. lors de l'exécution du système. Il est créé dynamiquement au démarrage et monté sur le point /proc, il est ensuite tenu à jour par le noyau.
 
 \subsection{Contenu}
-Comme nous l'avons précisé au point précédent, les fichiers contenus dans /proc sont virtuels. Leur taille est nulle et ils sont constamment mis à jour. Nous catégorisons les fichiers fournis sur base de leur contenu.
+Comme nous l'avons précisé au point précédent, les fichiers contenus dans /proc sont virtuels. Cela implique que leur taille est nulle. Ils sont créé dynamiquement et ils sont constamment mis à jour par le système. Nous catégorisons les fichiers fournis sur base de leur contenu.
 
 D'une part, /proc fournit des fichiers qui nous renseignent sur l'état général du système, son hardware et ses périphériques. Par exemple, /proc/cpuinfo décrit le processeur, /proc/meminfo donne des statistiques sur l'utilisation de la mémoire et /proc/stat donne des statistiques sur le système. 
 

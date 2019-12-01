@@ -5,17 +5,17 @@ L'objectif de ce module est de lister les processus actifs du système. Pour met
 Les critères de sélection disponibles sont :
 
 \begin{itemize}
-\item Sur base de l'identifiant du process ;
-\item Sur base de l’état du process ;
-\item Sur base de l’utilisateur du process ;
+\item Sur base de l'identifiant du processus ;
+\item Sur base de l’état du processus ;
+\item Sur base de l’utilisateur du processus (identifiant réel de l'utilisateur) ;
 \item Sur base de l’utilisateur et du shell courant (comme la commande “ps” 
-fournie par Linux) ;
+fournie par Linux, il s'agit du comportement par défaut) ;
 \end{itemize}
 
-\subsection{Sur base de l'état du process} 
-Filtre où seul les process dans un état spécifique donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “processes\_filter.matchesState()” cette fonction va scanner le fichier à l’aide de la fonction "scanStatFile()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
+\subsection{Sur base de l'état du processus} 
+Filtre où seul les processus dans un état donné par l’utilisateur seront donnés. Pour cela nous utilisons la fonction “processes\_filter.matchesState()” cette fonction va scanner le fichier à l’aide de la fonction "scanStatFile()” pour en extraire la lettre correspondant à l’état courant du process et la comparer avec l’entrée de l’utilisateur.
 
-Pour cela nous utilisons également une fonction  stateValueToCharacter() qui se charge de transformer l'entrée utilisateur en quelque chose de lisible par la fonction matchesState().
+Pour cela nous utilisons également une fonction stateValueToCharacter() qui se charge de transformer l'entrée utilisateur en quelque chose de lisible par la fonction matchesState().
 
 \begin{lstlisting}[frame=single, language=c]
 static bool matchesState(int pid, char* state)
@@ -38,10 +38,9 @@ static bool matchesState(int pid, char* state)
 
 
 \subsection{Sur base de l’utilisateur du process}
-Filtrage où seul les process dont l’userId correspond à l’user donné par l’utilisateur seront sélectionnés. Pour cela nous utilisons la fonction “processes\_filter.matchesUserName()”. Qui va tout d’abord se charger de récupérer l’id de l’utilisateur du process avec getUserRealIdidentifier().
+Filtre où seul les processus dont l’identidiant réel de l'utilisateur correspond au nom d'utilisateur spécifié seront sélectionnés. Pour cela nous utilisons la fonction “processes\_filter.matchesUserName()”. Qui va tout d’abord se charger de récupérer l’identifiant de l’utilisateur du processus avec getUserRealIdidentifier().
 
-On va ensuite récupérer le nom de l'utilisateur du process avec la fonction findUserName() présente dans user\_informaions.c qui va donc convertir un user id en nom.
-
+On va, ensuite, récupérer le nom de l'utilisateur du process avec la fonction findUserName() présente dans user\_informations.c qui va donc convertir un user id en nom.
 
 \begin{lstlisting}[frame=single, language=c]
 static bool matchesUserName(int pid, char* username)
@@ -57,7 +56,6 @@ static bool matchesUserName(int pid, char* username)
 
 \subsection{Sur base de l’utilisateur et du terminal courant} 
 Ici nous allons comme dans le ps de base, n'afficher que les process correspondants à l'utilisateur courant ainsi qu'au terminal courant. Pour cela nous utilisons matchCurrentUser() et matchesCurrentTerminal().
-
 
 \begin{lstlisting}[frame=single, language=c]
 static bool matchesCurrentUser(int pid)
@@ -90,4 +88,4 @@ Dans matchesCurrentTerminal() : On récupère les informations du process pour e
 
 \subsection{Plusieurs options simultanées} 
 
-Avec la fonction matchesOption() nous pouvons faire en sorte que le process soit choisi selon plusieurs critères au lieu d'un seul. 
+Avec la fonction matchesOption() nous pouvons faire en sorte que le process soit choisi selon plusieurs critères au lieu d'un seul.

@@ -1,5 +1,8 @@
 \section{Module de lecture des données}
-Le module de lecture des données se charge de la lecture des informations diponibles dans le système de fichiers /proc. Notre volonté est de lui fournir un identifiant de processus pour qu'il puisse nous informer sur son état. Pour implémenter AwesomePs, nous avons réduit la lecture au nécessaire. Actuellement, le module permet de lire le contenu du fichier /proc/[pid]/stat et de /proc/[pid]/status. Dans le futur, nous pouvons imaginer élargir le champs de données disponibles.
+Le module se charge de la lecture des informations qui nous sont utiles dans le système de fichiers /proc. Notre volonté est de lui fournir un identifiant de processus pour qu'il puisse nous informer sur son état. Pour implémenter AwesomePs, nous avons réduit la lecture au nécessaire. Dans cette section, nous décrivons les fichiers que nous avons sélectionné pour la lecture. Aussi, nous y détaillons les différentes étapes de lecture pour chacun d'eux.
+
+\subsection{Fichiers lus}
+Un grand nombre d'informations sont disponibles dans le système de fichiers virtuel /proc. Cependant, le but d'AwesomePs est de présenter l'état courant d'un processus. Par conséquent, nous avons du faire un choix et notre lecture se concentre sur les fichiers /proc/[pid]/stat et /proc/[pid]/status. Nous les avons choisi car ces deux fichiers concentrent des informations variées et intéressantes. Le premier décrit l'état d'un processus. Nous y trouvons, par exemple, des données qui concernent la pagination, le temps d'exécution, l'ordonnancement, le contexte et la mémoire d'un processus. Le second est un fichier qui condense les informations du premier, /proc/[pid]/statm et des informations liés à l'utilisateur (identifiant et groupe).
 
 \subsection{Lecture du fichier /proc/[pid]/stat}
 \subsubsection{Ce que nous apprend la documentation}
@@ -16,8 +19,7 @@ Nous avons d’abord besoin de savoir par quel type de donnée sont représenté
 \item Le champ "minflt (\%lu)" est représenté par un long entier non signé (long unsigned).
 \end{itemize}
 
-\pagebreak
-Voici la définition complète de la structure. Vous pouvez retrouver le code complet dans le fichier sources/procfs\_reader/process.h.
+Voici la définition de la structure. Vous pouvez retrouver le code complet dans le fichier sources/procfs\_reader/process.h.
 
 \begin{lstlisting}[frame=single, language=c]
 typedef struct process
