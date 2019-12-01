@@ -57,6 +57,11 @@ Le choix du sujet se fait en utilisant la clé ```state```. Cette clé permet à
 $ ./awesomeps topic=paging
 ```
 
+Les sujets disponibles sont ```general```, ```paging``` et ```time```. Voici leur description:
+- ```general``` : pid, commande, état, tty et nom d'utilisateur.
+- ```paging``` : pid, commande, nombre de défaut de pages majeurs et mineurs.
+- ```time``` : pid, commande, temps passé en mode utilisateur, temps passé en mode noyau.
+
 
 #### Sélection d'un processus sur base d'un pid
 Il est possible de sélectionner un processus unique en spécifiant son identifiant. Cela est possible en utilisant la clé ```pid```. Pour sélectionner le processus de pid 237, l'appel se fait comme suit :
