@@ -1,18 +1,20 @@
 \section{Introduction}
 L’objectif de notre projet est d’implémenter un outil en ligne de commande qui permet d’afficher des informations relatives aux processus actifs. Ces informations sont disponibles dans le système de fichiers monté sur le répertoire /proc.
 
-L’outil est semblable à la commande ps. Mais il se différencie en proposant des fonctionnalités plus simples.  La sélection des processus est basique. Elle permet à l’utilisateur de filtrer sur base de l’état (running, sleeping, waiting,...), de l’utilisateur ou du terminal courant. Quant à la sélection des données, elle se fait sur base de “sujets”. On retrouve les sujets suivant : la pagination, la vie d’un processus et la gestion des fichiers. Les sujets sont détaillés dans le fichier README.md du projet.
+L’outil est semblable à la commande ps. Mais il se différencie en proposant des fonctionnalités plus simples.  La sélection des processus est basique. Elle permet à l’utilisateur de filtrer sur base de l’état (running, sleeping, waiting,...), de l’utilisateur ou du terminal courant. Quant à la sélection des données, elle se fait sur base de “sujets”. On retrouve les sujets suivant : la pagination, le temps de vie du processus et un sujet général. Les sujets sont détaillés dans le fichier README.md du projet.
 
-Dans ce document, nous expliquons comment nous avons implémenté cet outil. Nous allons parcourir le projet pour comprendre son fonctionnement dans le détail. Il se divise en trois modules, nous avons dédié une section à chacun d’eux :
+Dans ce document, nous introduisons les concepts clés liés au système de fichiers /proc et nous expliquons comment nous avons implémenté cet outil. Nous allons parcourir le projet pour comprendre son fonctionnement dans le détail. Il se divise en trois modules, nous avons dédié une section à chacun d’eux :
 
 \begin{itemize}
-\item Le module de sélection des processus : il se charge de filtrer les processus du système d’exploitation sur base de critères. Il fournit une liste de numéros d’identification de processus (pid).
-\item Le module de lecture des données : il se charge de lire le système de fichier monté sur /proc pour un processus spécifique.
+\item Le module de sélection des processus : il se charge de rechercher et de filtrer les processus du système d’exploitation sur base de critères. Il fournit une liste de numéros d’identification de processus (pid).
+\item Le module de lecture des données : il se charge de lire le système de fichier monté sur /proc pour un processus spécifique (selon un identifiant donné).
 \item Le module d’interaction avec l’utilisateur : il se charge de lire les paramètres fournis par l’utilisateur et d’afficher les données désirées pour les processus sélectionnés.
 \end{itemize}
 
-D’abord, nous décrivons le fonctionnement du module de sélection des processus. Il s’agit, d’une part, d’analyser le code qui permet de rechercher l’ensemble des numéros  d’identification de processus (pid) disponibles et, d’autre part, de comprendre comment nous les filtrons.
+D’abord, nous introduisons les concepts clés liés au système de fichiers /proc. Nous parlerons de son fonctionnement, de son contenu et l'utilisation qui en est faite par le système d'exploitation.
 
-Ensuite, nous mettons en évidence les différentes étapes de la lecture du système de fichiers /proc. Nous parlons du code qui lit les informations intéressantes et disponibles. Nous expliquons également comment nous utilisons ces données et de leur interprétation.
+Puis, nous décrivons le fonctionnement du module de sélection des processus. Il s’agit, d’une part, d’analyser le code qui permet de rechercher l’ensemble des numéros d’identification de processus (pid) disponibles et, d’autre part, de comprendre comment nous les filtrons.
+
+Ensuite, nous mettons en évidence les différentes étapes de la lecture du système de fichiers /proc. Nous parlons du code qui lit les informations intéressantes et disponibles. Nous expliquons également comment nous interprétons et utilisons ces données.
 
 Enfin, nous exposons les différents mécanismes utilisés pour gérer l’interaction avec l’utilisateur. Cela englobe l’affichage des données sur la sortie standard et la gestion des paramètres entrés par l’utilisateur à l’exécution du programme.
