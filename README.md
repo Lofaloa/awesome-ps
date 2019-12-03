@@ -17,15 +17,13 @@ make awesomeps
 
 Après la compilation, vous retrouverez l'exécutable et le rapport au format pdf dans le dossier ```target```.
 
-***Note :*** ```make report``` cause une erreur.
-
 ### Visualiser le rapport
 ```
 bash guide.sh report
 ```
 ## Utilisation du projet
 ### Utilisation du guide
-Le guide est un script bash qui a pour but de rendre plus facile l'utilisation de ce répertoire. Il permet à l'utilisateur de compiler, de visualiser le rapport et de lancer une démonstration.
+Le guide est un script bash qui a pour but de rendre plus facile l'utilisation de ce répertoire. Il permet à l'utilisateur de compiler et de visualiser le rapport.
 
 Il peut être utilisé à la place du Makefile, son avantage est de guidé l'utilisateur. Il gère les cas d'erreur ou informe l'utilisateur en cas de problème.
 
@@ -42,11 +40,12 @@ Available options:
    help            Prints the list of available options
 $ >
 ```
+
 ### Utilisation de AwesomePs
 *AwesomePs* permet à l'utilisateur de spécifier une série d'options à l'exécution du programme. Ces paramètres passés en ligne de commande fonctionne en suivant un modèle de clé et de valeur. Vous trouverez ici, une description détaillée de ces options.
 
 #### Sélection sur base de l'état d'un processus
-Ce type de sélection est spécifié par la clé ```state```. Cette clé permet à l'utilisateur de sélectionner les processus à afficher sur base de leur état. Par exemple, s'il l'on afficher les données générales pour les processus en cours d'exécution, on écrira :
+Ce type de sélection est spécifié par la clé ```state```. Cette clé permet à l'utilisateur de sélectionner les processus à afficher sur base de leur état. Par exemple, s'il l'on affiche les données générales pour les processus en cours d'exécution, on écrira :
 ```
 $ ./awesomeps status=running topic=general
 ```
@@ -69,10 +68,10 @@ Il est possible de sélectionner un processus unique en spécifiant son identifi
 $ ./awesomeps pid=237
 ```
 
-***Note :*** il est impératif de spécifier le sujet choisi.
+**Note :** par défaut, l'affichage est général. Il est possible de spécifier un autre sujet pour afficher d'autres informations.
 
 #### Sélection sur base de l'utilisateur
-Ce type de sélection est spécifié par la clé ```user```. Elle permet à l'utilisateur de sélectionner les processus à afficher sur base de l'utilisateur. Par exemple, si l'on veut sélectionner les processus appartenant à l'utilisateur "*doe*", nous l'appel se fait de cette manière.
+Ce type de sélection est spécifié par la clé ```user```. Elle permet à l'utilisateur de sélectionner les processus à afficher sur base de l'utilisateur. Par exemple, si l'on veut sélectionner les processus appartenant à l'utilisateur "*doe*", l'appel se fait de cette manière.
 ```
 $ ./awesomeps user=doe
 ```
