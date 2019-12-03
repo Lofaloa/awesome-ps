@@ -40,7 +40,7 @@ static bool matchesState(int pid, char* state)
 \subsection{Sur base de l’utilisateur du process}
 Filtre où seul les processus dont l’identidiant réel de l'utilisateur correspond au nom d'utilisateur spécifié seront sélectionnés. Pour cela nous utilisons la fonction “processes\_filter.matchesUserName()”. Qui va tout d’abord se charger de récupérer l’identifiant de l’utilisateur du processus avec getUserRealIdidentifier().
 
-On va, ensuite, récupérer le nom de l'utilisateur du process avec la fonction findUserName() présente dans user\_informations.c qui va donc convertir un user id en nom.
+On va, ensuite, récupérer le nom de l'utilisateur du process avec la fonction findUserName() présente dans user\_informations.c qui va donc convertir un user id en nom. Cette dernière va récupérer l'id de l'utilisateur grâce à la fonction getpwuid() qui va se charger de renvoyer les informations d'un utilisateur dont on donne l'id en lisant dans le fichier /etc/passwd, là où sont stockés tous les utilisateurs.
 
 \begin{lstlisting}[frame=single, language=c]
 static bool matchesUserName(int pid, char* username)
