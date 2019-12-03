@@ -55,7 +55,16 @@ static bool matchesUserName(int pid, char* username)
 
 
 \subsection{Sur base de l’utilisateur et du terminal courant} 
-Ici nous allons comme dans le ps de base, n'afficher que les process correspondants à l'utilisateur courant ainsi qu'au terminal courant. Pour cela nous utilisons matchCurrentUser() et matchesCurrentTerminal().
+
+Ici nous allons comme dans le ps de base, n'afficher que les processus correspondants au contexte courant. 
+
+Le contexte comprend deux critères :
+\begin{itemize}
+\item Identifiant réel de l'utilisateur ayant lancé la commande awesompePs.
+\item Identifiant du shell parent.
+\end{itemize} 
+
+Pour cela nous utilisons nos fonctions matchCurrentUser() et matchesCurrentTerminal().
 
 \begin{lstlisting}[frame=single, language=c]
 static bool matchesCurrentUser(int pid)
@@ -69,7 +78,7 @@ static bool matchesCurrentUser(int pid)
 }
 \end{lstlisting}
 
-Dans matchesCurrentUser() : On compare l'utilisateur du process avec l'utilisateur du process courant. On utilise la fonction standard "getuid()" pour récupérer l'user id de l'utilisateur courant.
+Dans matchesCurrentUser() : On compare l'utilisateur du process avec l'utilisateur du process courant. On utilise la fonction standard "getuid()" pour récupérer l'identifiant réel de l'utilisateur courant.
 
 
 \begin{lstlisting}[frame=single, language=c]
@@ -84,8 +93,8 @@ static bool matchesCurrentTerminal(int pid)
 }
 \end{lstlisting}
 
-Dans matchesCurrentTerminal() : On récupère les informations du process pour en trouver l'id du process père et le comparer à l'id du process courant. La fonction standard getppid() est utilisée pour récuperer l'id du père du process courant.
+Dans matchesCurrentTerminal() : On recherche l'identifiant du processus parent d'awesomeps en utilisant la fonction standard getppid(). Ensuite on le compare à l'id du parent du processus donné pour récupérer les processus frères. On considère donc que le processus parent d'awesompeps sera le shell courant. Nous récupérons aussi le parent d'awesomeps.
 
 \subsection{Plusieurs options simultanées} 
 
-Avec la fonction matchesOption() nous pouvons faire en sorte que le process soit choisi selon plusieurs critères au lieu d'un seul.
+Avec la fonction matchesOption() nous pouvons faire en sorte que le processus soit choisi selon plusieurs critères au lieu d'un seul.
