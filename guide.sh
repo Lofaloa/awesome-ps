@@ -1,15 +1,13 @@
 #!/bin/bash
 
 ################################### PURPOSE ###################################
-# Ce fichier a pour but de gérer la première interaction avec l'utilisateur. On
-# pourrait imaginer:
-#   - Accepter des paramètres en ligne de commande. Exemples:
-#       - "--demo" : pour démarrer une démonstration du projet.
-#       - "--report" : pour afficher le rapport au format pdf.
-#       - "--install" : pour installer la commande sur la machine de
-#         l'utilisateur : (compilation, export de PATH)
-#       - "--help" : pour afficher la liste de ces commandes
-#
+# This script is used to make the user interaction with this reportory easier.
+# 
+# The scripts takes one commandline argument. It can be on of the following:
+#    - report: it open this project report in evince. If it was not build 
+#              before, make is called.
+#    - install: it compiles AwesomePs and the report.
+#    - help: it shows a list of argument for this script.
 ###############################################################################
 
 ################################ CONFIGURATION ################################
