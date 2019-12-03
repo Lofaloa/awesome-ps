@@ -19,7 +19,7 @@
 #define WAITING_STATE_VALUE "waiting"
 #define ZOMBIE_STATE_VALUE "zombie"
 
-// Difines the default option
+// Defines the default option
 #define DEFAULT_KEY "context" // not available for the users
 #define DEFAULT_VALUE "current" // not available for the users
 

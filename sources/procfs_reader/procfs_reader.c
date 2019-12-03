@@ -7,7 +7,4 @@
 void readProcessInformation(int pid, process *information)
 {
     scanStatFile(pid, information);
-    // information->uid = findProcessUserId(pid);
-    // char *userName = findUserName(information->uid);
-    // sprintf(information->user_name, "%s", userName);
 }

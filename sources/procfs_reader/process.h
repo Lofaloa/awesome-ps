@@ -39,9 +39,6 @@ typedef struct process
     long unsigned rsslim;
     int uid;
     char user_name[256];
-    /* And a lot of others, some of them are marked by [PT], we should look
-     * into that.
-     */
 } process;
 
 #endif /* process_H */
