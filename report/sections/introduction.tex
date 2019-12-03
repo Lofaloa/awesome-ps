@@ -1,7 +1,7 @@
 \section{Introduction}
-L’objectif de notre projet est d’implémenter un outil en ligne de commande qui permet d’afficher des informations relatives aux processus actifs. Ces informations sont disponibles dans le système de fichiers monté sur le répertoire /proc.
+L'objectif de notre projet est de comprendre comment le système de fichiers virtuel /proc est utilisé par la commande Linux ps. C'est un outil en ligne de commande qui permet d’afficher des informations relatives aux processus actifs. Pour comprendre son fonctionnement, notre démarche est d'implémenter un clone de la commande.
 
-L’outil est semblable à la commande ps. Mais il se différencie en proposant des fonctionnalités plus simples.  La sélection des processus est basique. Elle permet à l’utilisateur de filtrer sur base de l’état (running, sleeping, waiting,...), de l’utilisateur ou du terminal courant. Quant à la sélection des données, elle se fait sur base de “sujets”. On retrouve les sujets suivant : la pagination, le temps de vie du processus et un sujet général. Les sujets sont détaillés dans le fichier README.md du projet.
+Le clone se différencie en proposant des fonctionnalités plus simples.  La sélection des processus est basique. Elle permet à l’utilisateur de filtrer sur base de l’état (running, sleeping, waiting,...), de l’utilisateur ou du terminal courant. Quant à la sélection des données, elle se fait sur base de “sujets”. On retrouve les sujets suivant : la pagination, le temps de vie du processus et un sujet général. Les sujets sont détaillés dans le fichier README.md du projet.
 
 Dans ce document, nous introduisons les concepts clés liés au système de fichiers /proc et nous expliquons comment nous avons implémenté cet outil. Nous allons parcourir le projet pour comprendre son fonctionnement dans le détail. Il se divise en trois modules, nous avons dédié une section à chacun d’eux :
 
